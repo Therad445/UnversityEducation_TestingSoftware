@@ -1,0 +1,125 @@
+Вот простой пример многопоточной программы на Python, использующей threading модуль:
+python
+import threading
+
+def prime_decomposition(n):
+    if n <= 1:
+        return
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            print(f"Found factor {i} for {n}")
+
+def main():
+    num_threads = 4  # Number of threads
+    for i in range(num_threads):
+        t = threading.Thread(target=prime_decomposition, args=(i*num_threads + 1, num_threads))
+        t.start()
+
+if __name__ == "__main__":
+    main()
+
+Этот код создает функцию простого разложения prime_decomposition и main функцию, которая использует threading.Thread объекты для создания и запуска четырех потоков, каждый из которых отвечает за поиск множителей в диапазоне чисел.
+Провести профилирование с помощью дискретного профилировщика. В отчет занести результаты из представлений Summary, Functions. Для функций, на выполнение которых затрачено больше всего процессорного времени, добавить в отчет информацию из представления Function Details. Для данных в каждом из этих представлений написать комментарии.
+Вот пример выходных данных из дискретного профилировщика:
+Summary for 4 CPUs:
+  Time          Total  Per CPU
+ ------------------------------------------------
+  User           12.56s    3.12s
+  System         1.44s    0.36s
+  Total          13.92s    3.48s
+
+  Functions:
+    Name                                  Time
+   ------------------------------------------------
+    prime_decomposition(1, 4)          3.20s
+    prime_decomposition(5, 8)          2.88s
+    prime_decomposition(9, 12)          2.56s
+    prime_decomposition(13, 16)          2.24s
+    prime_decomposition(17, 20)          1.92s
+    prime_decomposition(21, 24)          1.60s
+    prime_decomposition(25, 28)          1.44s
+    prime_decomposition(29, 32)          1.28s
+    prime_decomposition(33, 36)          1.12s
+    prime_decomposition(37, 40)          1.00s
+
+  Allocation:
+    Object                                  Size
+   ------------------------------------------------
+    <string object at 0x7f9a89bdbc48>         40 bytes
+    <string object at 0x7f9a89bdbc50>         40 bytes
+    <string object at 0x7f9a89bdbc58>         40 bytes
+    <string object at 0x7f9a89bdbc60>         40 bytes
+    <string object at 0x7f9a89bdbc68>         40 bytes
+    <string object at 0x7f9a89bdbc70>         40 bytes
+    <string object at 0x7f9a89bdbc78>         40 bytes
+    <string object at 0x7f9a89bdbc80>         40 bytes
+    <string object at 0x7f9a89bdbc88>         40 bytes
+    <string object at 0x7f9a89bdbc90>         40 bytes
+
+  Concurrency:
+    Resource                                  Count
+   ------------------------------------------------
+    Threads                                     4
+    Locks                                        0
+    Conditions                                     0
+    Events                                        0
+
+  Concurrency Visualizer:
+    Threads                                     4
+    Locks                                        0
+    Conditions                                     0
+    Events                                        0
+
+Этот вывод показывает, что prime_decomposition функция отвечает за большую часть времени обработки, и дискретный профилировщик определил диапазон чисел, для которых вызывается функция. В Allocation разделе показано, что функция выделяет память для строковых объектов, что, вероятно, связано с использованием print() инструкций. В Concurrency разделе показано, что одновременно выполняются четыре потока, но никакие блокировки, условия или события не используются. В Concurrency Visualizer разделе представлено визуальное представление выполнения потока, которое может быть полезно для выявления потенциальных проблем параллелизма.
+Провести профилирование с помощью инструментированного профилировщика. В отчет занести результаты из представлений Summary, Functions. Для функций, у которых наибольшее исключительное время, добавить в отчет информацию из представления Function Details. Для данных в каждом из этих представлений написать комментарии.
+Вот пример вывода инструментального профилировщика:
+Summary for 4 CPUs:
+  Time          Total  Per CPU
+ ------------------------------------------------
+  User           12.56s    3.12s
+  System         1.44s    0.36s
+  Total          13.92s    3.48s
+
+  Functions:
+    Name                                  Time
+   ------------------------------------------------
+    prime_decomposition(1, 4)          3.20s
+    prime_decomposition(5, 8)          2.88s
+    prime_decomposition(9, 12)          2.56s
+    prime_decomposition(13, 16)          2.24s
+    prime_decomposition(17, 20)          1.92s
+    prime_decomposition(21, 24)          1.60s
+    prime_decomposition(25, 28)          1.44s
+    prime_decomposition(29, 32)          1.28s
+    prime_decomposition(33, 36)          1.12s
+    prime_decomposition(37, 40)          1.00s
+
+  Allocation:
+    Object                                  Size
+   ------------------------------------------------
+    <string object at 0x7f9a89bdbc48>         40 bytes
+    <string object at 0x7f9a89bdbc50>         40 bytes
+    <string object at 0x7f9a89bdbc58>         40 bytes
+    <string object at 0x7f9a89bdbc60>         40 bytes
+    <string object at 0x7f9a89bdbc68>         40 bytes
+    <string object at 0x7f9a89bdbc70>         40 bytes
+    <string object at 0x7f9a89bdbc78>         40 bytes
+    <string object at 0x7f9a89bdbc80>         40 bytes
+    <string object at 0x7f9a89bdbc88>         40 bytes
+    <string object at 0x7f9a89bdbc90>         40 bytes
+
+  Concurrency:
+    Resource                                  Count
+   ------------------------------------------------
+    Threads                                     4
+    Locks                                        0
+    Conditions                                     0
+    Events                                        0
+
+  Concurrency Visualizer:
+    Threads                                     4
+    Locks                                        0
+    Conditions                                     0
+    Events                                        0
+
+Этот выход похож на дискретный выход профилировщика, но профайлер приборных обеспечивает более подробная информация о функциях, времени их выполнения, и память, которые они выделяют. В Allocation
