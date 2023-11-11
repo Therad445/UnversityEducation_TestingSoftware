@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="207c1bce-8ac2-4f26-a027-aa5e835a081d" name="Changes" comment="Add Lab2">
+    <list default="true" id="207c1bce-8ac2-4f26-a027-aa5e835a081d" name="Changes" comment="Add methodics Lab7">
       <change afterPath="$PROJECT_DIR$/Lab3/Test.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Lab3/controller.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Lab3/model.py" afterDir="false" />
@@ -13,6 +13,7 @@
       <change afterPath="$PROJECT_DIR$/Lab4/controller.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Lab4/model.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Lab4/view.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Lab2/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lab2/Test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -73,7 +74,7 @@
       <recent name="$PROJECT_DIR$/Lab3" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python tests.Python tests in Test.py">
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -117,76 +118,55 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for Test.TestView.test_add" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="UnversityEducation_TestingSoftware" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab2" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab3" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lab2/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;Test.TestView.test_add&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="presenter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests for Test.TestView.test_multiply" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="UnversityEducation_TestingSoftware" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab2" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab3" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lab2/presenter.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;Test.TestView.test_multiply&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="view (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Python tests in Test.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="UnversityEducation_TestingSoftware" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab2" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lab3" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lab2/view.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/Lab3/Test.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests in Test.py" />
         <item itemvalue="Python.Test" />
-        <item itemvalue="Python.presenter" />
+        <item itemvalue="Python tests.Python tests for Test.TestView.test_multiply" />
+        <item itemvalue="Python tests.Python tests for Test.TestView.test_add" />
         <item itemvalue="Python.controller" />
-        <item itemvalue="Python.view (1)" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -215,7 +195,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699689365593</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add methodics Lab7">
+      <option name="closed" value="true" />
+      <created>1699712257373</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1699712257373</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -244,7 +232,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Uncorrect tests and code" />
     <MESSAGE value="Add Lab2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Lab2" />
+    <MESSAGE value="Add methodics Lab7" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add methodics Lab7" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -253,6 +242,11 @@
           <url>file://$PROJECT_DIR$/Lab3/view.py</url>
           <line>33</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Lab3/model.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
