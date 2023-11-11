@@ -42,3 +42,4 @@ class TestView(unittest.TestCase):
         self.mock_view.main.asseert_called_once()
 
 
+

@@ -39,6 +39,14 @@ class TestController(unittest.TestCase):
         self.controller.on_button_click('=')
         self.assertEqual(self.controller.view.value_var.get(), '3')
 
+        # Test division
+        self.controller.on_button_click('C')
+        self.controller.on_button_click(int('5'))
+        self.controller.on_button_click('+')
+        self.controller.on_button_click(int('7'))
+        self.controller.on_button_click('=')
+        self.assertEqual(self.controller.view.value_var.get(), str(12))
+
     def test_clear(self):
         self.controller.on_button_click(1)
         self.controller.on_button_click('C')
