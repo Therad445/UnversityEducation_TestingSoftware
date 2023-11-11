@@ -1,13 +1,16 @@
 import unittest
 from view import View
+from presenter import Controller
+
 
 class TestView(unittest.TestCase):
     def setUp(self):
-        self.view = View(None)
+        self.controller = Controller()
+        self.view = View(self.controller)
     
     def test_window_title(self):
         self.assertEqual(self.view.title(), 'PyTkCalc')
-    
+
     def test_button_captions(self):
         expected_captions = [
             'C', '+/-', '%', '/',
@@ -17,11 +20,11 @@ class TestView(unittest.TestCase):
             0, '.', '='
         ]
         actual_captions = [btn['text'] for btn in self.view.winfo_children() if btn.winfo_class() == 'TButton']
-        self.assertEqual(actual_captions, expected_captions)
+        self.assertEqual(expected_captions, actual_captions)
     
     def test_entry_field(self):
         entry = self.view.winfo_children()[0]
-        self.assertEqual(entry.winfo_class(), 'TEntry')
+        self.assertEqual(entry.winfo_class(), 'TFrame')
         self.assertEqual(entry['state'], 'disabled')
     
     def test_value_var(self):

@@ -3,6 +3,7 @@ from unittest.mock import patch
 from io import StringIO
 from calculator import main
 
+
 class TestCalculator(unittest.TestCase):
     def setUp(self):
         self.output = StringIO()

@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from controller import Controller
 
+
 class TestController(unittest.TestCase):
     def setUp(self):
         self.controller = Controller()
