@@ -3,7 +3,6 @@ from tkinter import ttk
 
 
 class View(tk.Tk):
-
     PAD = 10
 
     MAX_BUTTONS_PER_ROW = 4
@@ -33,7 +32,7 @@ class View(tk.Tk):
 
     def main(self):
         self.mainloop()
-        print('In main of view')
+        print('Program closed')
 
     def _make_main_frame(self):
         self.main_frm = ttk.Frame(self)
@@ -61,7 +60,7 @@ class View(tk.Tk):
 
             btn = ttk.Button(
                 frm, text=caption, command=(lambda button=caption: self.controller.on_button_click(button))
-                             )
+            )
             btn.pack(side="left")
             buttons_in_row += 1
 
