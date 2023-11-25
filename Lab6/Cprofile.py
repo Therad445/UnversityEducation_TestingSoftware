@@ -2,7 +2,6 @@ import math
 import multiprocessing
 import cProfile
 
-
 def is_prime(n):
     if n <= 1:
         return False
@@ -22,21 +21,9 @@ def prime_factors(n):
     return factors
 
 
-def profile(func):
-    """Decorator for run function profile"""
-    def wrapper(*args, **kwargs):
-        profile_filename = func.__name__ + '.prof'
-        profiler = cProfile.Profile()
-        result = profiler.runcall(func, *args, **kwargs)
-        profiler.dump_stats(profile_filename)
-        return result
-    return wrapper
-
-
-@profile
 def main():
     pool = multiprocessing.Pool()
-    results = pool.map(prime_factors, range(1, 1001))
+    results = pool.map(prime_factors, range(1, 101))
     for i in range(len(results)):
         str_out = ""
         for elem in results[i]:
@@ -45,4 +32,11 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    profile = cProfile.Profile()
+    profile.run('main()')
+    profile.print_stats()
+
+
+
+
+
