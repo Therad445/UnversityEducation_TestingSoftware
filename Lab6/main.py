@@ -1,7 +1,5 @@
 import math
 import multiprocessing
-import cProfile
-
 
 def is_prime(n):
     if n <= 1:
@@ -22,18 +20,6 @@ def prime_factors(n):
     return factors
 
 
-def profile(func):
-    """Decorator for run function profile"""
-    def wrapper(*args, **kwargs):
-        profile_filename = func.__name__ + '.prof'
-        profiler = cProfile.Profile()
-        result = profiler.runcall(func, *args, **kwargs)
-        profiler.dump_stats(profile_filename)
-        return result
-    return wrapper
-
-
-@profile
 def main():
     pool = multiprocessing.Pool()
     results = pool.map(prime_factors, range(1, 1001))

@@ -1,7 +1,6 @@
 import math
 import multiprocessing
-import cProfile
-
+import tracemalloc
 
 def is_prime(n):
     if n <= 1:
@@ -22,18 +21,6 @@ def prime_factors(n):
     return factors
 
 
-def profile(func):
-    """Decorator for run function profile"""
-    def wrapper(*args, **kwargs):
-        profile_filename = func.__name__ + '.prof'
-        profiler = cProfile.Profile()
-        result = profiler.runcall(func, *args, **kwargs)
-        profiler.dump_stats(profile_filename)
-        return result
-    return wrapper
-
-
-@profile
 def main():
     pool = multiprocessing.Pool()
     results = pool.map(prime_factors, range(1, 101))
@@ -45,4 +32,10 @@ def main():
 
 
 if __name__ == '__main__':
+    tracemalloc.start()
     main()
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics('filename')
+    print("[ Top 10 ]")
+    for stat in top_stats[:10]:
+        print(stat)

@@ -1,7 +1,6 @@
 import math
 import multiprocessing
-import cProfile
-
+import yappi
 
 def is_prime(n):
     if n <= 1:
@@ -22,18 +21,6 @@ def prime_factors(n):
     return factors
 
 
-def profile(func):
-    """Decorator for run function profile"""
-    def wrapper(*args, **kwargs):
-        profile_filename = func.__name__ + '.prof'
-        profiler = cProfile.Profile()
-        result = profiler.runcall(func, *args, **kwargs)
-        profiler.dump_stats(profile_filename)
-        return result
-    return wrapper
-
-
-@profile
 def main():
     pool = multiprocessing.Pool()
     results = pool.map(prime_factors, range(1, 101))
@@ -45,4 +32,16 @@ def main():
 
 
 if __name__ == '__main__':
+    yappi.set_clock_type("cpu")
+    yappi.start()
     main()
+    yappi.stop()
+    threads = yappi.get_thread_stats()
+    print("Thread stats:")
+    for thread in threads:
+        print(thread)
+
+    funcs = yappi.get_func_stats()
+    print("Function stats:")
+    for func in funcs:
+        print(func)

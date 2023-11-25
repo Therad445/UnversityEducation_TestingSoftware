@@ -1,0 +1,731 @@
+import math
+import multiprocessing
+import cProfile
+import pstats
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+
+def prime_factors(n):
+    factors = []
+    for i in range(2, n + 1):
+        if is_prime(i):
+            while n % i == 0:
+                factors.append(i)
+                n //= i
+    return factors
+
+
+
+def main():
+    pool = multiprocessing.Pool()
+    results = pool.map(prime_factors, range(1, 101))
+    for i in range(len(results)):
+        str_out = ""
+        for elem in results[i]:
+            str_out = str_out + " " + str(elem)
+        print(str(i) + " = " + str_out)
+
+
+if __name__ == '__main__':
+    cProfile.run('main()', 'restats')
+    p = pstats.Stats('restats')
+    p.strip_dirs().sort_stats('cumulative').print_stats()
+
+
+
+
+Задание Дискретное профилировани:
+
+
+@Therad445 ➜ /workspaces/UnversityEducation_TestingSoftware/Lab6 (main) $ python -m cProfile -s cumulative main.py
+         15063 function calls (14949 primitive calls) in 0.382 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     13/1    0.000    0.000    0.382    0.382 {built-in method builtins.exec}
+        1    0.000    0.000    0.382    0.382 main.py:1(<module>)
+        1    0.000    0.000    0.209    0.209 main.py:27(wrapper)
+        1    0.000    0.000    0.209    0.209 cProfile.py:106(runcall)
+        1    0.209    0.209    0.209    0.209 {method 'enable' of '_lsprof.Profiler' objects}
+     21/3    0.000    0.000    0.173    0.058 <frozen importlib._bootstrap>:1022(_find_and_load)
+     21/3    0.000    0.000    0.173    0.058 <frozen importlib._bootstrap>:987(_find_and_load_unlocked)
+     18/3    0.000    0.000    0.172    0.057 <frozen importlib._bootstrap>:664(_load_unlocked)
+     30/4    0.000    0.000    0.161    0.040 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
+     12/2    0.000    0.000    0.159    0.079 <frozen importlib._bootstrap_external>:877(exec_module)
+        1    0.000    0.000    0.147    0.147 __init__.py:1(<module>)
+      5/1    0.000    0.000    0.147    0.147 <frozen importlib._bootstrap>:1053(_handle_fromlist)
+      6/1    0.000    0.000    0.147    0.147 {built-in method builtins.__import__}
+        1    0.000    0.000    0.142    0.142 context.py:1(<module>)
+        1    0.000    0.000    0.115    0.115 reduction.py:1(<module>)
+       12    0.000    0.000    0.090    0.008 <frozen importlib._bootstrap_external>:950(get_code)
+       12    0.000    0.000    0.088    0.007 <frozen importlib._bootstrap_external>:1070(get_data)
+       12    0.088    0.007    0.088    0.007 {method 'read' of '_io.BufferedReader' objects}
+       18    0.000    0.000    0.070    0.004 <frozen importlib._bootstrap>:564(module_from_spec)
+        6    0.000    0.000    0.070    0.012 <frozen importlib._bootstrap_external>:1174(create_module)
+        6    0.070    0.012    0.070    0.012 {built-in method _imp.create_dynamic}
+        1    0.000    0.000    0.061    0.061 socket.py:1(<module>)
+        1    0.000    0.000    0.033    0.033 pickle.py:1(<module>)
+        1    0.000    0.000    0.015    0.015 selectors.py:1(<module>)
+        1    0.000    0.000    0.013    0.013 struct.py:1(<module>)
+        1    0.000    0.000    0.008    0.008 process.py:1(<module>)
+        7    0.000    0.000    0.005    0.001 enum.py:536(_convert_)
+        9    0.000    0.000    0.003    0.000 enum.py:359(__call__)
+        7    0.000    0.000    0.003    0.000 enum.py:483(_create_)
+       19    0.000    0.000    0.003    0.000 <frozen importlib._bootstrap>:921(_find_spec)
+       19    0.000    0.000    0.003    0.000 <frozen importlib._bootstrap_external>:1431(find_spec)
+       19    0.000    0.000    0.003    0.000 <frozen importlib._bootstrap_external>:1399(_get_spec)
+       60    0.001    0.000    0.002    0.000 <frozen importlib._bootstrap_external>:1536(find_spec)
+        1    0.000    0.000    0.002    0.002 signal.py:1(<module>)
+        7    0.001    0.000    0.002    0.000 enum.py:180(__new__)
+        7    0.000    0.000    0.002    0.000 enum.py:553(<listcomp>)
+       12    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:670(_compile_bytecode)
+       12    0.001    0.000    0.001    0.000 {built-in method marshal.loads}
+       50    0.001    0.000    0.001    0.000 {built-in method builtins.__build_class__}
+      114    0.000    0.000    0.001    0.000 enum.py:89(__setitem__)
+       95    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:140(_path_stat)
+       95    0.001    0.000    0.001    0.000 {built-in method posix.stat}
+      289    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:126(_path_join)
+        1    0.000    0.000    0.001    0.001 pickle.py:197(<listcomp>)
+      107    0.000    0.000    0.001    0.000 re.py:187(match)
+       18    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:492(_init_module_attrs)
+      394    0.000    0.000    0.000    0.000 socket.py:78(<lambda>)
+      107    0.000    0.000    0.000    0.000 re.py:288(_compile)
+     1611    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+      149    0.000    0.000    0.000    0.000 enum.py:470(__setattr__)
+        1    0.000    0.000    0.000    0.000 threading.py:1(<module>)
+      116    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x55b79f51c4c0}
+      110    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+      289    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:128(<listcomp>)
+        7    0.000    0.000    0.000    0.000 enum.py:222(<setcomp>)
+       24    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:380(cache_from_source)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:159(_path_isfile)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:783(compile)
+       12    0.000    0.000    0.000    0.000 {built-in method io.open_code}
+      278    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+       30    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:391(cached)
+       22    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:150(_path_is_mode_type)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:169(__enter__)
+        9    0.000    0.000    0.000    0.000 abc.py:105(__new__)
+       18    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:510(_get_cached)
+     1454    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1182(exec_module)
+     1658    0.000    0.000    0.000    0.000 {method 'isupper' of 'str' objects}
+      396    0.000    0.000    0.000    0.000 socket.py:88(<lambda>)
+      397    0.000    0.000    0.000    0.000 socket.py:93(<lambda>)
+      395    0.000    0.000    0.000    0.000 socket.py:83(<lambda>)
+        6    0.000    0.000    0.000    0.000 {built-in method _imp.exec_dynamic}
+        7    0.000    0.000    0.000    0.000 enum.py:165(__prepare__)
+       18    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1531(_get_spec)
+        1    0.000    0.000    0.000    0.000 __init__.py:328(namedtuple)
+       31    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:179(_get_module_lock)
+       76    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1356(_path_importer_cache)
+      114    0.000    0.000    0.000    0.000 enum.py:44(_is_private)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:622(_code)
+       21    0.000    0.000    0.000    0.000 enum.py:579(_get_mixins_)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:944(parse)
+       76    0.000    0.000    0.000    0.000 signal.py:9(<lambda>)
+      514    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+        1    0.000    0.000    0.000    0.000 _compat_pickle.py:1(<module>)
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1089(path_stats)
+      314    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:244(_verbose_message)
+       18    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:721(spec_from_file_location)
+       19    0.000    0.000    0.000    0.000 __init__.py:89(find_spec)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:436(_parse_sub)
+       24    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:132(_path_split)
+      100    0.000    0.000    0.000    0.000 enum.py:12(_is_descriptor)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:494(_parse)
+      114    0.000    0.000    0.000    0.000 enum.py:22(_is_dunder)
+       31    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:100(acquire)
+       31    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:125(release)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:173(__exit__)
+        7    0.000    0.000    0.000    0.000 enum.py:626(_find_new_)
+      114    0.000    0.000    0.000    0.000 enum.py:33(_is_sunder)
+      316    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.eval}
+       12    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+       21    0.000    0.000    0.000    0.000 enum.py:590(_find_data_type)
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:585(_classify_pyc)
+      2/1    0.000    0.000    0.000    0.000 sre_compile.py:87(_compile)
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.dir}
+       10    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:216(_lock_unlock_module)
+      602    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+      352    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 os.py:44(_get_exports_list)
+  566/564    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        7    0.000    0.000    0.000    0.000 {method 'sort' of 'list' objects}
+        3    0.000    0.000    0.000    0.000 sre_compile.py:292(_optimize_charset)
+        1    0.000    0.000    0.000    0.000 threading.py:1386(__init__)
+       24    0.000    0.000    0.000    0.000 {built-in method builtins.max}
+       17    0.000    0.000    0.000    0.000 {built-in method posix.getcwd}
+        1    0.000    0.000    0.000    0.000 sre_compile.py:560(_compile_info)
+       36    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:84(_unpack_uint32)
+       12    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+      107    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:618(_validate_timestamp_pyc)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1587(_fill_cache)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:198(cb)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1343(_path_hooks)
+        9    0.000    0.000    0.000    0.000 {built-in method _abc._abc_init}
+       76    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:897(__exit__)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:71(__init__)
+        1    0.000    0.000    0.000    0.000 pickle.py:1137(_Unpickler)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.listdir}
+       76    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:893(__enter__)
+       22    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:404(parent)
+      128    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+       21    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+       48    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:134(<genexpr>)
+      149    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 abc.py:110(register)
+       19    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:746(find_spec)
+        1    0.000    0.000    0.000    0.000 os.py:48(<listcomp>)
+        1    0.000    0.000    0.000    0.000 {built-in method _abc._abc_register}
+       72    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+        7    0.000    0.000    0.000    0.000 enum.py:423(__getattr__)
+       19    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:180(_path_isabs)
+        1    0.000    0.000    0.000    0.000 cProfile.py:1(<module>)
+        7    0.000    0.000    0.000    0.000 enum.py:198(<dictcomp>)
+        1    0.000    0.000    0.000    0.000 threading.py:827(__init__)
+      2/1    0.000    0.000    0.000    0.000 abc.py:121(__subclasscheck__)
+        7    0.000    0.000    0.000    0.000 enum.py:569(_check_for_existing_members)
+      128    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
+      100    0.000    0.000    0.000    0.000 enum.py:559(<lambda>)
+       19    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:357(__init__)
+        1    0.000    0.000    0.000    0.000 posixpath.py:376(abspath)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1628(path_hook_for_FileFinder)
+      128    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
+      2/1    0.000    0.000    0.000    0.000 {built-in method _abc._abc_subclasscheck}
+       38    0.000    0.000    0.000    0.000 __init__.py:23(<genexpr>)
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:542(_check_name_wrapper)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:435(_mk_bitmap)
+        7    0.000    0.000    0.000    0.000 enum.py:82(__init__)
+        1    0.000    0.000    0.000    0.000 <frozen zipimport>:64(__init__)
+        1    0.000    0.000    0.000    0.000 context.py:30(BaseContext)
+        1    0.000    0.000    0.000    0.000 __init__.py:22(<listcomp>)
+       13    0.000    0.000    0.000    0.000 sre_parse.py:255(get)
+        2    0.000    0.000    0.000    0.000 selectors.py:584(_can_use)
+       19    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:826(find_spec)
+       16    0.000    0.000    0.000    0.000 {built-in method builtins.locals}
+        1    0.000    0.000    0.000    0.000 process.py:71(BaseProcess)
+        1    0.000    0.000    0.000    0.000 pickle.py:407(_Pickler)
+       85    0.000    0.000    0.000    0.000 _compat_pickle.py:167(<genexpr>)
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:48(_new_module)
+      111    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+       78    0.000    0.000    0.000    0.000 signal.py:21(<lambda>)
+       64    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.lock' objects}
+       16    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+       17    0.000    0.000    0.000    0.000 sre_parse.py:234(__next)
+        1    0.000    0.000    0.000    0.000 posixpath.py:337(normpath)
+        1    0.000    0.000    0.000    0.000 reduction.py:33(ForkingPickler)
+       77    0.000    0.000    0.000    0.000 signal.py:16(<lambda>)
+       21    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:165(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:986(_set_tstate_lock)
+       63    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+      2/1    0.000    0.000    0.000    0.000 sre_parse.py:175(getwidth)
+        1    0.000    0.000    0.000    0.000 enum.py:986(__and__)
+       24    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+       44    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+       52    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+       36    0.000    0.000    0.000    0.000 {built-in method from_bytes}
+       24    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+       10    0.000    0.000    0.000    0.000 sre_parse.py:165(__getitem__)
+        7    0.000    0.000    0.000    0.000 {built-in method builtins.any}
+        1    0.000    0.000    0.000    0.000 threading.py:568(set)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1494(__init__)
+       60    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:71(_relax_case)
+        3    0.000    0.000    0.000    0.000 sre_compile.py:265(_compile_charset)
+        1    0.000    0.000    0.000    0.000 threading.py:816(Thread)
+        1    0.000    0.000    0.000    0.000 process.py:399(__init__)
+        1    0.000    0.000    0.000    0.000 threading.py:545(__init__)
+        1    0.000    0.000    0.000    0.000 socket.py:214(socket)
+       43    0.000    0.000    0.000    0.000 _compat_pickle.py:165(<genexpr>)
+       32    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1040(__init__)
+       21    0.000    0.000    0.000    0.000 enum.py:245(<genexpr>)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:164(_path_isdir)
+       45    0.000    0.000    0.000    0.000 {built-in method posix.fspath}
+        1    0.000    0.000    0.000    0.000 sre_compile.py:437(<listcomp>)
+        1    0.000    0.000    0.000    0.000 threading.py:389(notify_all)
+       37    0.000    0.000    0.000    0.000 {method 'items' of 'mappingproxy' objects}
+       19    0.000    0.000    0.000    0.000 {built-in method _imp.is_frozen}
+        1    0.000    0.000    0.000    0.000 sre_parse.py:225(__init__)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:433(_uniq)
+        6    0.000    0.000    0.000    0.000 signal.py:49(decorator)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:250(match)
+        2    0.000    0.000    0.000    0.000 _collections_abc.py:315(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 threading.py:236(__init__)
+        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1163(__init__)
+       11    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        1    0.000    0.000    0.000    0.000 selectors.py:207(_BaseSelectorImpl)
+        2    0.000    0.000    0.000    0.000 _weakrefset.py:37(__init__)
+        6    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:103(_RLock)
+        1    0.000    0.000    0.000    0.000 socket.py:662(SocketIO)
+        7    0.000    0.000    0.000    0.000 enum.py:451(__members__)
+        1    0.000    0.000    0.000    0.000 threading.py:800(_maintain_shutdown_locks)
+       27    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:622(Barrier)
+        1    0.000    0.000    0.000    0.000 selectors.py:291(SelectSelector)
+        1    0.000    0.000    0.000    0.000 selectors.py:81(BaseSelector)
+       12    0.000    0.000    0.000    0.000 {built-in method _imp._fix_co_filename}
+        7    0.000    0.000    0.000    0.000 {built-in method builtins.vars}
+       18    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:412(has_location)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:447(_simple)
+        1    0.000    0.000    0.000    0.000 context.py:310(ForkServerContext)
+        4    0.000    0.000    0.000    0.000 sre_parse.py:287(tell)
+        1    0.000    0.000    0.000    0.000 posixpath.py:60(isabs)
+        1    0.000    0.000    0.000    0.000 reduction.py:251(AbstractReducer)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:485(_get_literal_prefix)
+        1    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:359(notify)
+        1    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+       21    0.000    0.000    0.000    0.000 {method 'pop' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 {method 'close' of 'select.epoll' objects}
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:86(add)
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1065(get_filename)
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+       16    0.000    0.000    0.000    0.000 __init__.py:96(<lambda>)
+        1    0.000    0.000    0.000    0.000 pickle.py:200(_Framer)
+        6    0.000    0.000    0.000    0.000 {method 'setter' of 'property' objects}
+        4    0.000    0.000    0.000    0.000 sre_parse.py:161(__len__)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.urandom}
+        5    0.000    0.000    0.000    0.000 reduction.py:43(register)
+        2    0.000    0.000    0.000    0.000 enum.py:678(__new__)
+        7    0.000    0.000    0.000    0.000 {method 'mro' of 'type' objects}
+        3    0.000    0.000    0.000    0.000 sre_parse.py:173(append)
+        1    0.000    0.000    0.000    0.000 selectors.py:443(EpollSelector)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:928(fix_flags)
+        1    0.000    0.000    0.000    0.000 threading.py:983(_set_native_id)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:76(__init__)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:516(_get_charset_prefix)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:112(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        7    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+       12    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:874(create_module)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:619(isstring)
+        6    0.000    0.000    0.000    0.000 signal.py:48(_wraps)
+        1    0.000    0.000    0.000    0.000 selectors.py:61(_SelectorMapping)
+        1    0.000    0.000    0.000    0.000 context.py:220(Process)
+        1    0.000    0.000    0.000    0.000 selectors.py:342(_PollLikeSelector)
+        1    0.000    0.000    0.000    0.000 process.py:364(_ParentProcess)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.register_at_fork}
+        1    0.000    0.000    0.000    0.000 context.py:230(DefaultContext)
+        5    0.000    0.000    0.000    0.000 __init__.py:402(<genexpr>)
+        2    0.000    0.000    0.000    0.000 {built-in method fromkeys}
+        1    0.000    0.000    0.000    0.000 threading.py:224(Condition)
+        1    0.000    0.000    0.000    0.000 pickle.py:263(_Unframer)
+        1    0.000    0.000    0.000    0.000 context.py:283(SpawnProcess)
+        5    0.000    0.000    0.000    0.000 {built-in method sys.intern}
+        1    0.000    0.000    0.000    0.000 selectors.py:434(PollSelector)
+        7    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+        1    0.000    0.000    0.000    0.000 threading.py:264(__enter__)
+        1    0.000    0.000    0.000    0.000 cProfile.py:27(Profile)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:82(groups)
+        5    0.000    0.000    0.000    0.000 {method '__contains__' of 'frozenset' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _thread.get_native_id}
+        1    0.000    0.000    0.000    0.000 context.py:276(ForkProcess)
+        1    0.000    0.000    0.000    0.000 threading.py:1301(_make_invoke_excepthook)
+        1    0.000    0.000    0.000    0.000 threading.py:90(RLock)
+        1    0.000    0.000    0.000    0.000 threading.py:534(Event)
+        5    0.000    0.000    0.000    0.000 {method 'isidentifier' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 context.py:203(reducer)
+        8    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1500(<genexpr>)
+        1    0.000    0.000    0.000    0.000 posixpath.py:41(_get_sep)
+        2    0.000    0.000    0.000    0.000 {method 'acquire' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:279(_is_owned)
+        1    0.000    0.000    0.000    0.000 threading.py:410(Semaphore)
+        4    0.000    0.000    0.000    0.000 abc.py:7(abstractmethod)
+        1    0.000    0.000    0.000    0.000 threading.py:1405(_DummyThread)
+        1    0.000    0.000    0.000    0.000 reduction.py:211(_C)
+        1    0.000    0.000    0.000    0.000 context.py:295(ForkServerProcess)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:477(_get_iscased)
+        1    0.000    0.000    0.000    0.000 threading.py:1354(Timer)
+        1    0.000    0.000    0.000    0.000 process.py:349(AuthenticationString)
+        1    0.000    0.000    0.000    0.000 context.py:233(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'difference_update' of 'set' objects}
+        3    0.000    0.000    0.000    0.000 {built-in method builtins.globals}
+        1    0.000    0.000    0.000    0.000 threading.py:267(__exit__)
+        1    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 pickle.py:97(_Stop)
+        1    0.000    0.000    0.000    0.000 pickle.py:73(PickleError)
+        1    0.000    0.000    0.000    0.000 threading.py:979(_set_ident)
+        1    0.000    0.000    0.000    0.000 process.py:397(_MainProcess)
+        1    0.000    0.000    0.000    0.000 main.py:25(profile)
+        1    0.000    0.000    0.000    0.000 threading.py:493(BoundedSemaphore)
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 context.py:14(ProcessError)
+        1    0.000    0.000    0.000    0.000 context.py:302(ForkContext)
+        1    0.000    0.000    0.000    0.000 pickle.py:77(PicklingError)
+        1    0.000    0.000    0.000    0.000 pickle.py:84(UnpicklingError)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:169(__setitem__)
+        1    0.000    0.000    0.000    0.000 threading.py:1384(_MainThread)
+        1    0.000    0.000    0.000    0.000 context.py:306(SpawnContext)
+        1    0.000    0.000    0.000    0.000 socket.py:211(_GiveupOnSendfile)
+        1    0.000    0.000    0.000    0.000 {method '__exit__' of '_thread.RLock' objects}
+        1    0.000    0.000    0.000    0.000 threading.py:776(BrokenBarrierError)
+        1    0.000    0.000    0.000    0.000 {built-in method sys._getframe}
+        1    0.000    0.000    0.000    0.000 threading.py:810(<listcomp>)
+        1    0.000    0.000    0.000    0.000 threading.py:1183(daemon)
+        1    0.000    0.000    0.000    0.000 {built-in method _thread._set_sentinel}
+        1    0.000    0.000    0.000    0.000 context.py:17(BufferTooShort)
+        1    0.000    0.000    0.000    0.000 {method '__enter__' of '_thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 context.py:20(TimeoutError)
+        1    0.000    0.000    0.000    0.000 context.py:23(AuthenticationError)
+
+
+
+
+Задание Профилирование выделения памяти:
+
+[ Top 10 ]
+<frozen importlib._bootstrap_external>:0: size=626 KiB, count=6556, average=98 B
+<frozen importlib._bootstrap>:0: size=69.6 KiB, count=576, average=124 B
+/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:0: size=61.4 KiB, count=323, average=195 B
+/home/codespace/.python/current/lib/python3.10/abc.py:0: size=48.1 KiB, count=247, average=199 B
+/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:0: size=35.1 KiB, count=235, average=153 B
+/home/codespace/.python/current/lib/python3.10/tempfile.py:0: size=27.2 KiB, count=149, average=187 B
+/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:0: size=25.1 KiB, count=141, average=182 B
+/home/codespace/.python/current/lib/python3.10/shutil.py:0: size=24.7 KiB, count=182, average=139 B
+/home/codespace/.python/current/lib/python3.10/subprocess.py:0: size=23.4 KiB, count=127, average=189 B
+/home/codespace/.python/current/lib/python3.10/weakref.py:0: size=22.6 KiB, count=144, average=161 B
+
+
+
+
+
+
+Задание Профилирование конкуренции:
+
+
+Thread stats:
+{0: '_MainThread', 1: 0, 2: 140608017633920, 3: 0.0361334, 4: 6}
+{0: 'Thread', 1: 1, 2: 140608007464704, 3: 0.0124107, 4: 6}
+{0: 'Thread', 1: 3, 2: 140607990679296, 3: 0.0015595000000000001, 4: 4}
+{0: 'Thread', 1: 2, 2: 140607999072000, 3: 0.0012280000000000001, 4: 3}
+Function stats:
+{0: 'main', 1: '/workspaces/UnversityEducation_TestingSoftware/Lab6/yap.py', 2: 24, 3: 1, 4: 1, 5: False, 6: 0.0346063, 7: 0.00044600000000000005, 8: 0, 9: <yappi.YChildFuncStats object at 0x7fe1da6fed10>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0346063, 15: '/workspaces/UnversityEducation_TestingSoftware/Lab6/yap.py:24 main'}
+{0: 'DefaultContext.Pool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 115, 3: 1, 4: 1, 5: False, 6: 0.0326673, 7: 3.61e-05, 8: 1, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbee30>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0326673, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:115 DefaultContext.Pool'}
+{0: '_find_and_load', 1: '<frozen importlib._bootstrap>', 2: 1022, 3: 33, 4: 4, 5: False, 6: 0.0270606, 7: 0.00042800000000000005, 8: 4, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfb50>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0008200181818181819, 15: '<frozen importlib._bootstrap>:1022 _find_and_load'}
+{0: '_find_and_load_unlocked', 1: '<frozen importlib._bootstrap>', 2: 987, 3: 33, 4: 4, 5: False, 6: 0.026677500000000003, 7: 0.0002585, 8: 16, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe830>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.000808409090909091, 15: '<frozen importlib._bootstrap>:987 _find_and_load_unlocked'}
+{0: '_load_unlocked', 1: '<frozen importlib._bootstrap>', 2: 664, 3: 31, 4: 4, 5: False, 6: 0.0255271, 7: 0.00033810000000000003, 8: 47, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd2d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0008234548387096774, 15: '<frozen importlib._bootstrap>:664 _load_unlocked'}
+{0: 'SourceFileLoader.exec_module', 1: '<frozen importlib._bootstrap_external>', 2: 877, 3: 19, 4: 4, 5: False, 6: 0.024961300000000002, 7: 0.0001166, 8: 62, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe050>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0013137526315789474, 15: '<frozen importlib._bootstrap_external>:877 SourceFileLoader.exec_module'}
+{0: '_call_with_frames_removed', 1: '<frozen importlib._bootstrap>', 2: 233, 3: 44, 4: 4, 5: False, 6: 0.023577400000000002, 7: 0.0001421, 8: 79, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd450>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00053585, 15: '<frozen importlib._bootstrap>:233 _call_with_frames_removed'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.023054500000000002, 7: 6.94e-05, 8: 81, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf490>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.023054500000000002, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:1 <module>'}
+{0: 'run', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 942, 3: 3, 4: 3, 5: False, 6: 0.0151237, 7: 2.46e-05, 8: 312, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdcf0>, 10: 1, 11: 'Thread', 12: 0, 14: 0.005041233333333333, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:942 run'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.012904, 7: 5.13e-05, 8: 153, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc3d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.012904, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:1 <module>'}
+{0: '_handle_workers', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 506, 3: 1, 4: 1, 5: False, 6: 0.0123628, 7: 0.00020960000000000003, 8: 313, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba4a0>, 10: 1, 11: 'Thread', 12: 0, 14: 0.0123628, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:506 _handle_workers'}
+{0: '_find_spec', 1: '<frozen importlib._bootstrap>', 2: 921, 3: 33, 4: 33, 5: False, 6: 0.011053200000000001, 7: 0.0007231000000000001, 8: 17, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe8f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00033494545454545457, 15: '<frozen importlib._bootstrap>:921 _find_spec'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.010572, 7: 3.6400000000000004e-05, 8: 154, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe110>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.010572, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:1 <module>'}
+{0: '_wait_for_updates', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 500, 3: 31, 4: 31, 5: False, 6: 0.0095411, 7: 0.0002035, 8: 329, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdbd0>, 10: 1, 11: 'Thread', 12: 0, 14: 0.00030777741935483874, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:500 _wait_for_updates'}
+{0: 'find_spec', 1: '<frozen importlib._bootstrap_external>', 2: 1431, 3: 32, 4: 32, 5: False, 6: 0.0087656, 7: 0.0001032, 8: 25, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbff10>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.000273925, 15: '<frozen importlib._bootstrap_external>:1431 find_spec'}
+{0: 'wait', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 922, 3: 66, 4: 66, 5: False, 6: 0.0086723, 7: 0.0011978000000000002, 8: 330, 9: <yappi.YChildFuncStats object at 0x7fe1da6fda50>, 10: 1, 11: 'Thread', 12: 0, 14: 0.00013139848484848487, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:922 wait'}
+{0: '_get_spec', 1: '<frozen importlib._bootstrap_external>', 2: 1399, 3: 32, 4: 32, 5: False, 6: 0.0086624, 7: 0.0005803000000000001, 8: 26, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe3b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0002707, 15: '<frozen importlib._bootstrap_external>:1399 _get_spec'}
+{0: 'Pool.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 183, 3: 1, 4: 1, 5: False, 6: 0.0086131, 7: 0.0002124, 8: 221, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0130>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0086131, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:183 Pool.__init__'}
+{0: 'FileFinder.find_spec', 1: '<frozen importlib._bootstrap_external>', 2: 1536, 3: 75, 4: 75, 5: False, 6: 0.007734400000000001, 7: 0.0016004, 8: 30, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff790>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00010312533333333335, 15: '<frozen importlib._bootstrap_external>:1536 FileFinder.find_spec'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.005884400000000001, 7: 0.00013470000000000002, 8: 155, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcfd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.005884400000000001, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:1 <module>'}
+{0: 'SourceFileLoader.get_code', 1: '<frozen importlib._bootstrap_external>', 2: 950, 3: 19, 4: 19, 5: False, 6: 0.0052434000000000005, 7: 0.00037410000000000004, 8: 63, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd150>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0002759684210526316, 15: '<frozen importlib._bootstrap_external>:950 SourceFileLoader.get_code'}
+{0: '_handle_fromlist', 1: '<frozen importlib._bootstrap>', 2: 1053, 3: 12, 4: 11, 5: False, 6: 0.0052120000000000005, 7: 6.730000000000001e-05, 8: 87, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf6d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0004343333333333334, 15: '<frozen importlib._bootstrap>:1053 _handle_fromlist'}
+{0: 'PollSelector.register', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 352, 3: 159, 4: 159, 5: False, 6: 0.004812100000000001, 7: 0.0009298, 8: 336, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdb10>, 10: 1, 11: 'Thread', 12: 0, 14: 3.026477987421384e-05, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:352 PollSelector.register'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0044506, 7: 6.71e-05, 8: 110, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc8b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0044506, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:1 <module>'}
+{0: 'module_from_spec', 1: '<frozen importlib._bootstrap>', 2: 564, 3: 31, 4: 31, 5: False, 6: 0.0040686, 7: 0.00021500000000000002, 8: 48, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff370>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001312451612903226, 15: '<frozen importlib._bootstrap>:564 module_from_spec'}
+{0: 'ForkContext.SimpleQueue', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 110, 3: 3, 4: 3, 5: False, 6: 0.0038687, 7: 4.6500000000000005e-05, 8: 223, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf910>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0012895666666666668, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:110 ForkContext.SimpleQueue'}
+{0: '_path_join', 1: '<frozen importlib._bootstrap_external>', 2: 126, 3: 350, 4: 350, 5: False, 6: 0.0038480000000000003, 7: 0.0013308, 8: 34, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff610>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.0994285714285715e-05, 15: '<frozen importlib._bootstrap_external>:126 _path_join'}
+{0: 'PollSelector.register', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 235, 3: 159, 4: 159, 5: False, 6: 0.0036457, 7: 0.0009718000000000001, 8: 337, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdf90>, 10: 1, 11: 'Thread', 12: 0, 14: 2.2928930817610064e-05, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:235 PollSelector.register'}
+{0: 'Connection.poll', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 258, 3: 35, 4: 35, 5: False, 6: 0.0034278, 7: 0.00023450000000000004, 8: 395, 9: <yappi.YChildFuncStats object at 0x7fe1da6d9780>, 10: 1, 11: 'Thread', 12: 0, 14: 9.793714285714286e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:258 Connection.poll'}
+{0: 'SimpleQueue.empty', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 352, 3: 34, 4: 34, 5: False, 6: 0.003376, 7: 0.00011260000000000001, 8: 394, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba6e0>, 10: 1, 11: 'Thread', 12: 0, 14: 9.929411764705883e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:352 SimpleQueue.empty'}
+{0: 'Pool._setup_queues', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 345, 3: 1, 4: 1, 5: False, 6: 0.0033631000000000004, 7: 1.2800000000000001e-05, 8: 222, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe650>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0033631000000000004, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:345 Pool._setup_queues'}
+{0: 'Pool._repopulate_pool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 305, 3: 1, 4: 1, 5: False, 6: 0.0032081, 7: 1.9e-05, 8: 265, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd270>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0032081, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:305 Pool._repopulate_pool'}
+{0: '_repopulate_pool_static', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 314, 3: 1, 4: 1, 5: False, 6: 0.0031891000000000003, 7: 0.0001371, 8: 266, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe410>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0031891000000000003, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:314 _repopulate_pool_static'}
+{0: 'Connection._poll', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 428, 3: 35, 4: 35, 5: False, 6: 0.0030923000000000005, 7: 0.00013240000000000002, 8: 397, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba200>, 10: 1, 11: 'Thread', 12: 0, 14: 8.835142857142858e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:428 Connection._poll'}
+{0: 'SimpleQueue.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 339, 3: 3, 4: 3, 5: False, 6: 0.0030328, 7: 5.33e-05, 8: 229, 9: <yappi.YChildFuncStats object at 0x7fe1da6feef0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0010109333333333333, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:339 SimpleQueue.__init__'}
+{0: 'ForkContext.Lock', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 65, 3: 6, 4: 6, 5: False, 6: 0.0029031, 7: 9.43e-05, 8: 233, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbce50>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00048385, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:65 ForkContext.Lock'}
+{0: 'ForkProcess.start', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 110, 3: 2, 4: 2, 5: False, 6: 0.0028137, 7: 0.0001285, 8: 275, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff8b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00140685, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:110 ForkProcess.start'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0027792000000000003, 7: 7.42e-05, 8: 186, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe590>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0027792000000000003, 15: '/home/codespace/.python/current/lib/python3.10/random.py:1 <module>'}
+{0: '_Popen', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 278, 3: 2, 4: 2, 5: False, 6: 0.0026208, 7: 5.7900000000000005e-05, 8: 278, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbec50>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0013104, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:278 _Popen'}
+{0: '_init_module_attrs', 1: '<frozen importlib._bootstrap>', 2: 492, 3: 31, 4: 31, 5: False, 6: 0.0022321000000000003, 7: 0.0004912, 8: 51, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbffd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.200322580645163e-05, 15: '<frozen importlib._bootstrap>:492 _init_module_attrs'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0021452000000000003, 7: 2.9e-05, 8: 86, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbea70>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0021452000000000003, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:1 <module>'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0021189, 7: 4.05e-05, 8: 134, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbef50>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0021189, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:1 <module>'}
+{0: '<listcomp>', 1: '<frozen importlib._bootstrap_external>', 2: 128, 3: 350, 4: 350, 5: False, 6: 0.0021182, 7: 0.0013541, 8: 35, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff070>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.052000000000001e-06, 15: '<frozen importlib._bootstrap_external>:128 <listcomp>'}
+{0: 'PollSelector._fileobj_lookup', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 216, 3: 159, 4: 159, 5: False, 6: 0.0019554000000000004, 7: 0.00048510000000000003, 8: 338, 9: <yappi.YChildFuncStats object at 0x7fe1da68ae30>, 10: 1, 11: 'Thread', 12: 0, 14: 1.2298113207547172e-05, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:216 PollSelector._fileobj_lookup'}
+{0: '_compile_bytecode', 1: '<frozen importlib._bootstrap_external>', 2: 670, 3: 19, 4: 19, 5: False, 6: 0.0019187000000000002, 7: 0.0001609, 8: 76, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfcd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001009842105263158, 15: '<frozen importlib._bootstrap_external>:670 _compile_bytecode'}
+{0: '_path_stat', 1: '<frozen importlib._bootstrap_external>', 2: 140, 3: 124, 4: 124, 5: False, 6: 0.0017288000000000002, 7: 0.0003164, 8: 31, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe950>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.394193548387097e-05, 15: '<frozen importlib._bootstrap_external>:140 _path_stat'}
+{0: 'cache_from_source', 1: '<frozen importlib._bootstrap_external>', 2: 380, 3: 38, 4: 38, 5: False, 6: 0.0016433, 7: 0.00041450000000000005, 8: 57, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffa90>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.324473684210526e-05, 15: '<frozen importlib._bootstrap_external>:380 cache_from_source'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/bz2.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0016293000000000002, 7: 1.76e-05, 8: 161, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff490>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0016293000000000002, 15: '/home/codespace/.python/current/lib/python3.10/bz2.py:1 <module>'}
+{0: 'Popen.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 15, 3: 2, 4: 2, 5: False, 6: 0.0015751, 7: 4.4200000000000004e-05, 8: 281, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffd90>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00078755, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:15 Popen.__init__'}
+{0: '_handle_results', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 573, 3: 1, 4: 1, 5: False, 6: 0.0015355000000000002, 7: 7.790000000000001e-05, 8: 354, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce08b0>, 10: 3, 11: 'Thread', 12: 0, 14: 0.0015355000000000002, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:573 _handle_results'}
+{0: 'ExtensionFileLoader.create_module', 1: '<frozen importlib._bootstrap_external>', 2: 1174, 3: 11, 4: 11, 5: False, 6: 0.0015114000000000002, 7: 6.19e-05, 8: 90, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfeb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001374, 15: '<frozen importlib._bootstrap_external>:1174 ExtensionFileLoader.create_module'}
+{0: 'Popen._launch', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 62, 3: 2, 4: 2, 5: False, 6: 0.0014843, 7: 0.0003326, 8: 284, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe650>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00074215, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:62 Popen._launch'}
+{0: '_maintain_pool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 333, 3: 31, 4: 31, 5: False, 6: 0.0014709, 7: 0.00010010000000000001, 8: 316, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba500>, 10: 1, 11: 'Thread', 12: 0, 14: 4.7448387096774194e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:333 _maintain_pool'}
+{0: '_fileobj_to_fd', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 21, 3: 159, 4: 159, 5: False, 6: 0.0014703000000000001, 7: 0.0007124000000000001, 8: 339, 9: <yappi.YChildFuncStats object at 0x7fe1da6bbe50>, 10: 1, 11: 'Thread', 12: 0, 14: 9.247169811320756e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:21 _fileobj_to_fd'}
+{0: 'Lock.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 161, 3: 6, 4: 6, 5: False, 6: 0.001427, 7: 2.8400000000000003e-05, 8: 243, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcc70>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00023783333333333336, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:161 Lock.__init__'}
+{0: 'Lock.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 50, 3: 6, 4: 6, 5: False, 6: 0.0013986, 7: 0.0005005000000000001, 8: 244, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbecb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0002331, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:50 Lock.__init__'}
+{0: '_join_exited_workers', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 289, 3: 31, 4: 31, 5: False, 6: 0.0013708000000000001, 7: 0.0002629, 8: 317, 9: <yappi.YChildFuncStats object at 0x7fe1da6b8190>, 10: 1, 11: 'Thread', 12: 0, 14: 4.421935483870968e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:289 _join_exited_workers'}
+{0: '_handle_tasks', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 527, 3: 1, 4: 1, 5: False, 6: 0.0012008000000000001, 7: 0.0001452, 8: 349, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce04f0>, 10: 2, 11: 'Thread', 12: 0, 14: 0.0012008000000000001, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:527 _handle_tasks'}
+{0: 'ModuleSpec.cached', 1: '<frozen importlib._bootstrap>', 2: 391, 3: 49, 4: 49, 5: False, 6: 0.0011878000000000001, 7: 0.0001207, 8: 54, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbccd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.4240816326530616e-05, 15: '<frozen importlib._bootstrap>:391 ModuleSpec.cached'}
+{0: '_get_worker_sentinels', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 284, 3: 31, 4: 31, 5: False, 6: 0.0011221, 7: 0.00011020000000000001, 8: 325, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdab0>, 10: 1, 11: 'Thread', 12: 0, 14: 3.6196774193548385e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:284 _get_worker_sentinels'}
+{0: 'SourceFileLoader.get_data', 1: '<frozen importlib._bootstrap_external>', 2: 1070, 3: 19, 4: 19, 5: False, 6: 0.0011206, 7: 0.0001909, 8: 67, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe590>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.8978947368421054e-05, 15: '<frozen importlib._bootstrap_external>:1070 SourceFileLoader.get_data'}
+{0: 'ForkProcess.exitcode', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 224, 3: 64, 4: 64, 5: False, 6: 0.0010986, 7: 0.00034100000000000005, 8: 319, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba260>, 10: 1, 11: 'Thread', 12: 0, 14: 1.7165625e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:224 ForkProcess.exitcode'}
+{0: '_get_cached', 1: '<frozen importlib._bootstrap_external>', 2: 510, 3: 30, 4: 30, 5: False, 6: 0.0010671, 7: 0.0001375, 8: 55, 9: <yappi.YChildFuncStats object at 0x7fe1da6fee30>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.557e-05, 15: '<frozen importlib._bootstrap_external>:510 _get_cached'}
+{0: 'PollSelector.select', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 403, 3: 66, 4: 66, 5: False, 6: 0.0010491, 7: 0.00041730000000000006, 8: 346, 9: <yappi.YChildFuncStats object at 0x7fe1da6d96c0>, 10: 1, 11: 'Thread', 12: 0, 14: 1.5895454545454545e-05, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:403 PollSelector.select'}
+{0: 'Connection.recv', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 251, 3: 9, 4: 9, 5: False, 6: 0.0010256, 7: 0.0001112, 8: 357, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0670>, 10: 3, 11: 'Thread', 12: 0, 14: 0.00011395555555555555, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:251 Connection.recv'}
+{0: '<listcomp>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 286, 3: 31, 4: 31, 5: False, 6: 0.0010119, 7: 0.00025600000000000004, 8: 326, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba140>, 10: 1, 11: 'Thread', 12: 0, 14: 3.264193548387097e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:286 <listcomp>'}
+{0: '_ModuleLockManager.__enter__', 1: '<frozen importlib._bootstrap>', 2: 169, 3: 33, 4: 33, 5: False, 6: 0.0010045, 7: 0.0001542, 8: 6, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd750>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.0439393939393938e-05, 15: '<frozen importlib._bootstrap>:169 _ModuleLockManager.__enter__'}
+{0: 'Finalize.__call__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 205, 3: 3, 4: 3, 5: False, 6: 0.0009611000000000001, 7: 3.8400000000000005e-05, 8: 468, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc0d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0003203666666666667, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:205 Finalize.__call__'}
+{0: 'Connection._recv_bytes', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 418, 3: 12, 4: 12, 5: False, 6: 0.0009321, 7: 0.0001309, 8: 438, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba3e0>, 10: 1, 11: 'Thread', 12: 0, 14: 7.7675e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:418 Connection._recv_bytes'}
+{0: '_terminate_pool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 680, 3: 1, 4: 1, 5: False, 6: 0.0008784000000000001, 7: 0.00011140000000000001, 8: 470, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdd50>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0008784000000000001, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:680 _terminate_pool'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/lzma.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0008524, 7: 2.12e-05, 8: 166, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbca30>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0008524, 15: '/home/codespace/.python/current/lib/python3.10/lzma.py:1 <module>'}
+{0: 'Connection.send', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 207, 3: 10, 4: 10, 5: False, 6: 0.0008476, 7: 0.00012340000000000002, 8: 374, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0610>, 10: 2, 11: 'Thread', 12: 0, 14: 8.476e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:207 Connection.send'}
+{0: 'PollSelector.__init__', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 348, 3: 66, 4: 66, 5: False, 6: 0.0008328000000000001, 7: 0.00037380000000000003, 8: 331, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba560>, 10: 1, 11: 'Thread', 12: 0, 14: 1.261818181818182e-05, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:348 PollSelector.__init__'}
+{0: 'Connection._recv', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 379, 3: 24, 4: 24, 5: False, 6: 0.0007628000000000001, 7: 0.0001942, 8: 439, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba680>, 10: 1, 11: 'Thread', 12: 0, 14: 3.178333333333334e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:379 Connection._recv'}
+{0: 'Popen.poll', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 24, 3: 68, 4: 68, 5: False, 6: 0.0007407000000000001, 7: 0.0002829, 8: 321, 9: <yappi.YChildFuncStats object at 0x7fe1da6b8040>, 10: 1, 11: 'Thread', 12: 0, 14: 1.0892647058823531e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:24 Popen.poll'}
+{0: '<lambda>', 1: '<string>', 2: 1, 3: 159, 4: 159, 5: False, 6: 0.0007185000000000001, 7: 0.0004772, 8: 341, 9: <yappi.YChildFuncStats object at 0x7fe1da6d97e0>, 10: 1, 11: 'Thread', 12: 0, 14: 4.518867924528302e-06, 15: '<string>:1 <lambda>'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/heapq.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0006901, 7: 1.46e-05, 8: 88, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc430>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0006901, 15: '/home/codespace/.python/current/lib/python3.10/heapq.py:1 <module>'}
+{0: '_make_name', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 114, 3: 6, 4: 6, 5: False, 6: 0.0006604, 7: 4.92e-05, 8: 246, 9: <yappi.YChildFuncStats object at 0x7fe1da6fecb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00011006666666666667, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:114 _make_name'}
+{0: 'FileFinder._get_spec', 1: '<frozen importlib._bootstrap_external>', 2: 1531, 3: 30, 4: 30, 5: False, 6: 0.000652, 7: 0.0001441, 8: 41, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc5b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.1733333333333334e-05, 15: '<frozen importlib._bootstrap_external>:1531 FileFinder._get_spec'}
+{0: 'Thread.start', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 916, 3: 3, 4: 3, 5: False, 6: 0.0006398, 7: 6.87e-05, 8: 300, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe5f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00021326666666666668, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:916 Thread.start'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/bisect.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0006320000000000001, 7: 9.7e-06, 8: 187, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe890>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0006320000000000001, 15: '/home/codespace/.python/current/lib/python3.10/bisect.py:1 <module>'}
+{0: 'Thread.__init__', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 827, 3: 3, 4: 3, 5: False, 6: 0.0005942, 7: 0.000181, 8: 291, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbebf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00019806666666666667, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:827 Thread.__init__'}
+{0: 'SimpleQueue.put', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 369, 3: 6, 4: 6, 5: False, 6: 0.0005916000000000001, 7: 8.420000000000001e-05, 8: 452, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfe50>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.860000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:369 SimpleQueue.put'}
+{0: '_path_isfile', 1: '<frozen importlib._bootstrap_external>', 2: 159, 3: 30, 4: 30, 5: False, 6: 0.0005880000000000001, 7: 9.15e-05, 8: 39, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbda50>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.9600000000000002e-05, 15: '<frozen importlib._bootstrap_external>:159 _path_isfile'}
+{0: '_get_module_lock', 1: '<frozen importlib._bootstrap>', 2: 179, 3: 33, 4: 33, 5: False, 6: 0.0005864, 7: 0.0002743, 8: 7, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfd30>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.776969696969697e-05, 15: '<frozen importlib._bootstrap>:179 _get_module_lock'}
+{0: '_RandomNameSequence.__next__', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 153, 3: 6, 4: 6, 5: False, 6: 0.0005758, 7: 6.340000000000001e-05, 8: 249, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc670>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.596666666666666e-05, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:153 _RandomNameSequence.__next__'}
+{0: 'dumps', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py', 2: 48, 3: 16, 4: 16, 5: False, 6: 0.000564, 7: 0.00014890000000000001, 8: 453, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd570>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.525e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py:48 dumps'}
+{0: 'ForkProcess.sentinel', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 247, 3: 124, 4: 124, 5: False, 6: 0.0005622, 7: 0.0003839, 8: 328, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdff0>, 10: 1, 11: 'Thread', 12: 0, 14: 4.533870967741936e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:247 ForkProcess.sentinel'}
+{0: '_path_split', 1: '<frozen importlib._bootstrap_external>', 2: 132, 3: 38, 4: 38, 5: False, 6: 0.0005461, 7: 0.00018150000000000002, 8: 58, 9: <yappi.YChildFuncStats object at 0x7fe1da6fff10>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.4371052631578947e-05, 15: '<frozen importlib._bootstrap_external>:132 _path_split'}
+{0: '_verbose_message', 1: '<frozen importlib._bootstrap>', 2: 244, 3: 403, 4: 403, 5: False, 6: 0.0005376000000000001, 7: 0.0005376000000000001, 8: 38, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff7f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3339950372208439e-06, 15: '<frozen importlib._bootstrap>:244 _verbose_message'}
+{0: 'PollSelector.__exit__', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 203, 3: 66, 4: 66, 5: False, 6: 0.0005363, 7: 0.00020400000000000003, 8: 391, 9: <yappi.YChildFuncStats object at 0x7fe1da6fde70>, 10: 1, 11: 'Thread', 12: 0, 14: 8.125757575757575e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:203 PollSelector.__exit__'}
+{0: 'Event.wait', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 589, 3: 4, 4: 4, 5: False, 6: 0.0005142, 7: 3.94e-05, 8: 303, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbead0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00012855, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:589 Event.wait'}
+{0: '_path_is_mode_type', 1: '<frozen importlib._bootstrap_external>', 2: 150, 3: 30, 4: 30, 5: False, 6: 0.0004965, 7: 9.230000000000001e-05, 8: 40, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbeb30>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.655e-05, 15: '<frozen importlib._bootstrap_external>:150 _path_is_mode_type'}
+{0: 'Connection._send_bytes', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 395, 3: 16, 4: 16, 5: False, 6: 0.00046350000000000004, 7: 0.00018570000000000001, 8: 462, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdff0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.8968750000000003e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:395 Connection._send_bytes'}
+{0: 'Connection.fileno', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 173, 3: 97, 4: 97, 5: False, 6: 0.00046230000000000007, 7: 0.0003143, 8: 344, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdc90>, 10: 1, 11: 'Thread', 12: 0, 14: 4.7659793814433e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:173 Connection.fileno'}
+{0: 'spec_from_file_location', 1: '<frozen importlib._bootstrap_external>', 2: 721, 3: 30, 4: 30, 5: False, 6: 0.00046090000000000004, 7: 0.00024150000000000002, 8: 43, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf2b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.5363333333333336e-05, 15: '<frozen importlib._bootstrap_external>:721 spec_from_file_location'}
+{0: '_ImportLockContext.__exit__', 1: '<frozen importlib._bootstrap>', 2: 897, 3: 130, 4: 130, 5: False, 6: 0.0004488, 7: 0.0003088, 8: 21, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc190>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.4523076923076923e-06, 15: '<frozen importlib._bootstrap>:897 _ImportLockContext.__exit__'}
+{0: '_ImportLockContext.__enter__', 1: '<frozen importlib._bootstrap>', 2: 893, 3: 130, 4: 130, 5: False, 6: 0.00044550000000000004, 7: 0.0003055, 8: 18, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe1d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.426923076923077e-06, 15: '<frozen importlib._bootstrap>:893 _ImportLockContext.__enter__'}
+{0: 'Condition.wait', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 288, 3: 4, 4: 4, 5: False, 6: 0.00042980000000000004, 7: 8.120000000000001e-05, 8: 306, 9: <yappi.YChildFuncStats object at 0x7fe1da6fffd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00010745000000000001, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:288 Condition.wait'}
+{0: 'DistutilsMetaFinder.find_spec', 1: '/home/codespace/.python/current/lib/python3.10/site-packages/_distutils_hack/__init__.py', 2: 89, 3: 33, 4: 33, 5: False, 6: 0.000407, 7: 0.0002246, 8: 19, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfdf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2333333333333334e-05, 15: '/home/codespace/.python/current/lib/python3.10/site-packages/_distutils_hack/__init__.py:89 DistutilsMetaFinder.find_spec'}
+{0: 'Random.choices', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 506, 3: 6, 4: 6, 5: False, 6: 0.0003813, 7: 5.17e-05, 8: 252, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffe50>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.355e-05, 15: '/home/codespace/.python/current/lib/python3.10/random.py:506 Random.choices'}
+{0: '_ModuleLockManager.__exit__', 1: '<frozen importlib._bootstrap>', 2: 173, 3: 33, 4: 33, 5: False, 6: 0.0003645, 7: 9.48e-05, 8: 95, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcd90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.1045454545454546e-05, 15: '<frozen importlib._bootstrap>:173 _ModuleLockManager.__exit__'}
+{0: 'SourceFileLoader.path_stats', 1: '<frozen importlib._bootstrap_external>', 2: 1089, 3: 19, 4: 19, 5: False, 6: 0.00036280000000000004, 7: 6.510000000000001e-05, 8: 66, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff0d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.9094736842105266e-05, 15: '<frozen importlib._bootstrap_external>:1089 SourceFileLoader.path_stats'}
+{0: 'PollSelector.__init__', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 210, 3: 66, 4: 66, 5: False, 6: 0.0003618, 7: 0.0002607, 8: 332, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdb70>, 10: 1, 11: 'Thread', 12: 0, 14: 5.481818181818182e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:210 PollSelector.__init__'}
+{0: '_unpack_uint32', 1: '<frozen importlib._bootstrap_external>', 2: 84, 3: 57, 4: 57, 5: False, 6: 0.0003487, 7: 0.0002187, 8: 73, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe350>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.117543859649123e-06, 15: '<frozen importlib._bootstrap_external>:84 _unpack_uint32'}
+{0: 'PollSelector.close', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 269, 3: 66, 4: 66, 5: False, 6: 0.0003323, 7: 0.00022940000000000002, 8: 392, 9: <yappi.YChildFuncStats object at 0x7fe1da6fddb0>, 10: 1, 11: 'Thread', 12: 0, 14: 5.0348484848484845e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:269 PollSelector.close'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0003211, 7: 5.53e-05, 8: 234, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd690>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0003211, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:1 <module>'}
+{0: '<listcomp>', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 519, 3: 6, 4: 6, 5: False, 6: 0.0003196, 7: 0.0001776, 8: 253, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe410>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.326666666666667e-05, 15: '/home/codespace/.python/current/lib/python3.10/random.py:519 <listcomp>'}
+{0: 'Event.__init__', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 545, 3: 4, 4: 4, 5: False, 6: 0.0003194, 7: 5.6000000000000006e-05, 8: 295, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfbb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.985e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:545 Event.__init__'}
+{0: 'ModuleSpec.parent', 1: '<frozen importlib._bootstrap>', 2: 404, 3: 57, 4: 57, 5: False, 6: 0.0003175, 7: 0.00020290000000000003, 8: 2, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe3b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.570175438596491e-06, 15: '<frozen importlib._bootstrap>:404 ModuleSpec.parent'}
+{0: 'cb', 1: '<frozen importlib._bootstrap>', 2: 198, 3: 33, 4: 33, 5: False, 6: 0.0003149, 7: 0.00018020000000000002, 8: 97, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf5b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.542424242424242e-06, 15: '<frozen importlib._bootstrap>:198 cb'}
+{0: '_validate_timestamp_pyc', 1: '<frozen importlib._bootstrap_external>', 2: 618, 3: 19, 4: 19, 5: False, 6: 0.00031180000000000004, 7: 9.05e-05, 8: 75, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0370>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6410526315789478e-05, 15: '<frozen importlib._bootstrap_external>:618 _validate_timestamp_pyc'}
+{0: 'Pool.map', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 362, 3: 1, 4: 1, 5: False, 6: 0.00029590000000000004, 7: 2.25e-05, 8: 363, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff2b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00029590000000000004, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:362 Pool.map'}
+{0: 'ForkProcess._check_closed', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 99, 3: 196, 4: 196, 5: False, 6: 0.0002883, 7: 0.0002883, 8: 320, 9: <yappi.YChildFuncStats object at 0x7fe1da6fde10>, 10: 1, 11: 'Thread', 12: 0, 14: 1.4709183673469388e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:99 ForkProcess._check_closed'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0002776, 7: 2.3100000000000002e-05, 8: 111, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf010>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0002776, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:1 <module>'}
+{0: '_ModuleLock.release', 1: '<frozen importlib._bootstrap>', 2: 125, 3: 33, 4: 33, 5: False, 6: 0.0002697, 7: 0.0001886, 8: 96, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff970>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.172727272727273e-06, 15: '<frozen importlib._bootstrap>:125 _ModuleLock.release'}
+{0: '_ModuleLock.acquire', 1: '<frozen importlib._bootstrap>', 2: 100, 3: 33, 4: 33, 5: False, 6: 0.0002639, 7: 0.00018680000000000001, 8: 12, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffc10>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.996969696969697e-06, 15: '<frozen importlib._bootstrap>:100 _ModuleLock.acquire'}
+{0: '_classify_pyc', 1: '<frozen importlib._bootstrap_external>', 2: 585, 3: 19, 4: 19, 5: False, 6: 0.00026250000000000004, 7: 0.0001105, 8: 71, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcf70>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3815789473684213e-05, 15: '<frozen importlib._bootstrap_external>:585 _classify_pyc'}
+{0: 'Connection.send_bytes', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 186, 3: 6, 4: 6, 5: False, 6: 0.00025790000000000003, 7: 7.03e-05, 8: 459, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc310>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.298333333333334e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:186 Connection.send_bytes'}
+{0: 'ExtensionFileLoader.exec_module', 1: '<frozen importlib._bootstrap_external>', 2: 1182, 3: 11, 4: 11, 5: False, 6: 0.0002563, 7: 5.3e-05, 8: 92, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdb10>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.33e-05, 15: '<frozen importlib._bootstrap_external>:1182 ExtensionFileLoader.exec_module'}
+{0: 'ForkingPickler.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py', 2: 38, 3: 16, 4: 16, 5: False, 6: 0.0002523, 7: 0.00016810000000000002, 8: 454, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe7d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.576875e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py:38 ForkingPickler.__init__'}
+{0: 'MapResult._set', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 809, 3: 8, 4: 8, 5: False, 6: 0.0002516, 7: 4.7600000000000005e-05, 8: 405, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce06d0>, 10: 3, 11: 'Thread', 12: 0, 14: 3.145e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:809 MapResult._set'}
+{0: 'SimpleQueue.get', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 363, 3: 3, 4: 3, 5: False, 6: 0.00024920000000000004, 7: 4.2800000000000004e-05, 8: 434, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba1d0>, 10: 1, 11: 'Thread', 12: 0, 14: 8.306666666666668e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:363 SimpleQueue.get'}
+{0: 'Condition.__init__', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 236, 3: 4, 4: 4, 5: False, 6: 0.00024880000000000003, 7: 0.00024880000000000003, 8: 296, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe110>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.220000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:236 Condition.__init__'}
+{0: 'Connection._check_closed', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 139, 3: 160, 4: 160, 5: False, 6: 0.00023930000000000002, 7: 0.00023930000000000002, 8: 345, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdc30>, 10: 1, 11: 'Thread', 12: 0, 14: 1.4956250000000002e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:139 Connection._check_closed'}
+{0: '_ModuleLock.__init__', 1: '<frozen importlib._bootstrap>', 2: 71, 3: 33, 4: 33, 5: False, 6: 0.0002345, 7: 0.0001495, 8: 9, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce02b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.106060606060606e-06, 15: '<frozen importlib._bootstrap>:71 _ModuleLock.__init__'}
+{0: 'Connection._send', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 370, 3: 16, 4: 16, 5: False, 6: 0.00021840000000000002, 7: 9.35e-05, 8: 464, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffa30>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3650000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:370 Connection._send'}
+{0: '<genexpr>', 1: '<frozen importlib._bootstrap_external>', 2: 134, 3: 76, 4: 76, 5: False, 6: 0.0002055, 7: 0.00015030000000000002, 8: 60, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe770>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.703947368421053e-06, 15: '<frozen importlib._bootstrap_external>:134 <genexpr>'}
+{0: '__new__', 1: '/home/codespace/.python/current/lib/python3.10/abc.py', 2: 105, 3: 6, 4: 6, 5: False, 6: 0.00020390000000000002, 7: 3.6e-05, 8: 119, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcb50>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.398333333333334e-05, 15: '/home/codespace/.python/current/lib/python3.10/abc.py:105 __new__'}
+{0: 'register_after_fork', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 171, 3: 6, 4: 6, 5: False, 6: 0.0001979, 7: 5.5100000000000004e-05, 8: 258, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe5f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.298333333333333e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:171 register_after_fork'}
+{0: 'Process', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 179, 3: 2, 4: 2, 5: False, 6: 0.0001975, 7: 2.29e-05, 8: 267, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd8d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.875e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:179 Process'}
+{0: 'namedtuple', 1: '/home/codespace/.python/current/lib/python3.10/collections/__init__.py', 2: 328, 3: 1, 4: 1, 5: False, 6: 0.00019370000000000002, 7: 8.21e-05, 8: 176, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe170>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00019370000000000002, 15: '/home/codespace/.python/current/lib/python3.10/collections/__init__.py:328 namedtuple'}
+{0: 'ForkProcess.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 80, 3: 2, 4: 2, 5: False, 6: 0.00017460000000000002, 7: 0.00010740000000000001, 8: 268, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf8b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.730000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:80 ForkProcess.__init__'}
+{0: 'Pool.__del__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 266, 3: 1, 4: 1, 5: False, 6: 0.0001706, 7: 3.3e-05, 8: 449, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe710>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001706, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:266 Pool.__del__'}
+{0: 'MapResult.get', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 767, 3: 1, 4: 1, 5: False, 6: 0.0001688, 7: 2.08e-05, 8: 370, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd210>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001688, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:767 MapResult.get'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/traceback.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.0001594, 7: 8.81e-05, 8: 104, 9: <yappi.YChildFuncStats object at 0x7fe1da6fed70>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001594, 15: '/home/codespace/.python/current/lib/python3.10/traceback.py:1 <module>'}
+{0: 'Connection.recv_bytes', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 213, 3: 3, 4: 3, 5: False, 6: 0.0001585, 7: 2.29e-05, 8: 437, 9: <yappi.YChildFuncStats object at 0x7fe1da6d8430>, 10: 1, 11: 'Thread', 12: 0, 14: 5.2833333333333335e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:213 Connection.recv_bytes'}
+{0: 'ForkProcess.terminate', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 128, 3: 2, 4: 2, 5: False, 6: 0.0001461, 7: 1.2400000000000002e-05, 8: 516, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0490>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.305e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:128 ForkProcess.terminate'}
+{0: '_PoolCache.__delitem__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 161, 3: 1, 4: 1, 5: False, 6: 0.0001461, 7: 9.9e-06, 8: 406, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0850>, 10: 3, 11: 'Thread', 12: 0, 14: 0.0001461, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:161 _PoolCache.__delitem__'}
+{0: 'find_spec', 1: '<frozen importlib._bootstrap>', 2: 746, 3: 33, 4: 33, 5: False, 6: 0.0001451, 7: 8.15e-05, 8: 22, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfc10>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.3969696969696975e-06, 15: '<frozen importlib._bootstrap>:746 find_spec'}
+{0: 'Finalize.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 186, 3: 3, 4: 3, 5: False, 6: 0.00014450000000000002, 7: 0.0001259, 8: 287, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffcd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.8166666666666674e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:186 Finalize.__init__'}
+{0: 'MapResult.wait', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 764, 3: 1, 4: 1, 5: False, 6: 0.0001438, 7: 3.2000000000000003e-06, 8: 371, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe950>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001438, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:764 MapResult.wait'}
+{0: '_path_importer_cache', 1: '<frozen importlib._bootstrap_external>', 2: 1356, 3: 101, 4: 101, 5: False, 6: 0.0001417, 7: 0.0001417, 8: 28, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd9f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.402970297029703e-06, 15: '<frozen importlib._bootstrap_external>:1356 _path_importer_cache'}
+{0: 'Popen.terminate', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 56, 3: 2, 4: 2, 5: False, 6: 0.0001306, 7: 1.88e-05, 8: 517, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd7b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.53e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:56 Popen.terminate'}
+{0: 'Condition._release_save', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 273, 3: 4, 4: 4, 5: False, 6: 0.000123, 7: 1.3500000000000001e-05, 8: 310, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff430>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.075e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:273 Condition._release_save'}
+{0: '_path_isabs', 1: '<frozen importlib._bootstrap_external>', 2: 180, 3: 30, 4: 30, 5: False, 6: 0.00012150000000000001, 7: 7.620000000000001e-05, 8: 45, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff6d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.05e-06, 15: '<frozen importlib._bootstrap_external>:180 _path_isabs'}
+{0: 'Pool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 173, 3: 1, 4: 1, 5: False, 6: 0.0001201, 7: 0.0001201, 8: 214, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbed10>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.0001201, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:173 Pool'}
+{0: '_RandomNameSequence.rng', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 142, 3: 6, 4: 6, 5: False, 6: 0.00011970000000000001, 7: 5.81e-05, 8: 250, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe350>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.995e-05, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:142 _RandomNameSequence.rng'}
+{0: 'find_spec', 1: '<frozen importlib._bootstrap>', 2: 826, 3: 32, 4: 32, 5: False, 6: 0.00011810000000000001, 7: 7.93e-05, 8: 23, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf970>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.6906250000000003e-06, 15: '<frozen importlib._bootstrap>:826 find_spec'}
+{0: 'WeakValueDictionary.__setitem__', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 165, 3: 6, 4: 6, 5: False, 6: 0.0001168, 7: 5.2300000000000004e-05, 8: 260, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe6b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.9466666666666668e-05, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:165 WeakValueDictionary.__setitem__'}
+{0: 'current_thread', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1430, 3: 12, 4: 12, 5: False, 6: 0.0001128, 7: 8.99e-05, 8: 314, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba3b0>, 10: 1, 11: 'Thread', 12: 0, 14: 9.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1430 current_thread'}
+{0: 'Popen._send_signal', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 46, 3: 2, 4: 2, 5: False, 6: 0.00011180000000000001, 7: 1.4700000000000002e-05, 8: 518, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe0b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.5900000000000004e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:46 Popen._send_signal'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 0.00011020000000000001, 7: 2.65e-05, 8: 224, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd990>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00011020000000000001, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:1 <module>'}
+{0: 'Pool._map_async', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 471, 3: 1, 4: 1, 5: False, 6: 0.00010460000000000001, 7: 4.0600000000000004e-05, 8: 364, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff4f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 0.00010460000000000001, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:471 Pool._map_async'}
+{0: '_SelectorMapping.__init__', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 64, 3: 66, 4: 66, 5: False, 6: 0.0001011, 7: 0.0001011, 8: 333, 9: <yappi.YChildFuncStats object at 0x7fe1da6d8370>, 10: 1, 11: 'Thread', 12: 0, 14: 1.5318181818181818e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:64 _SelectorMapping.__init__'}
+{0: 'Thread.join', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1064, 3: 3, 4: 3, 5: False, 6: 9.640000000000001e-05, 7: 3.4e-05, 8: 514, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc610>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.213333333333334e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1064 Thread.join'}
+{0: 'SourceFileLoader._check_name_wrapper', 1: '<frozen importlib._bootstrap_external>', 2: 542, 3: 19, 4: 19, 5: False, 6: 9.180000000000001e-05, 7: 6.86e-05, 8: 64, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe530>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.831578947368422e-06, 15: '<frozen importlib._bootstrap_external>:542 SourceFileLoader._check_name_wrapper'}
+{0: 'PollSelector.__enter__', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 200, 3: 66, 4: 66, 5: False, 6: 9.01e-05, 7: 9.01e-05, 8: 335, 9: <yappi.YChildFuncStats object at 0x7fe1da6d8220>, 10: 1, 11: 'Thread', 12: 0, 14: 1.365151515151515e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:200 PollSelector.__enter__'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/_compression.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 8.66e-05, 7: 8.6e-06, 8: 162, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffeb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.66e-05, 15: '/home/codespace/.python/current/lib/python3.10/_compression.py:1 <module>'}
+{0: '_relax_case', 1: '<frozen importlib._bootstrap_external>', 2: 71, 3: 75, 4: 75, 5: False, 6: 8.43e-05, 7: 8.43e-05, 8: 33, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfa90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.124e-06, 15: '<frozen importlib._bootstrap_external>:71 _relax_case'}
+{0: 'Connection.__del__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 135, 3: 6, 4: 6, 5: False, 6: 7.86e-05, 7: 2.78e-05, 8: 530, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbea10>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.31e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:135 Connection.__del__'}
+{0: 'Pool._guarded_task_generation', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 385, 3: 9, 4: 9, 5: False, 6: 7.81e-05, 7: 3.2500000000000004e-05, 8: 372, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0550>, 10: 2, 11: 'Thread', 12: 0, 14: 8.677777777777777e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:385 Pool._guarded_task_generation'}
+{0: 'Pipe', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 521, 3: 3, 4: 3, 5: False, 6: 7.64e-05, 7: 3.3100000000000005e-05, 8: 230, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf7f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.5466666666666668e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:521 Pipe'}
+{0: 'register', 1: '/home/codespace/.python/current/lib/python3.10/abc.py', 2: 110, 3: 2, 4: 2, 5: False, 6: 7.26e-05, 7: 6e-06, 8: 112, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff3d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.63e-05, 15: '/home/codespace/.python/current/lib/python3.10/abc.py:110 register'}
+{0: 'Lock.__enter__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 94, 3: 9, 4: 9, 5: False, 6: 7.09e-05, 7: 5.3500000000000006e-05, 8: 435, 9: <yappi.YChildFuncStats object at 0x7fe1da6d83d0>, 10: 1, 11: 'Thread', 12: 0, 14: 7.877777777777778e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:94 Lock.__enter__'}
+{0: 'ModuleSpec.__init__', 1: '<frozen importlib._bootstrap>', 2: 357, 3: 33, 4: 33, 5: False, 6: 7.070000000000001e-05, 7: 7.070000000000001e-05, 8: 46, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbca90>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.142424242424243e-06, 15: '<frozen importlib._bootstrap>:357 ModuleSpec.__init__'}
+{0: 'ForkProcess.join', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 142, 3: 1, 4: 1, 5: False, 6: 6.82e-05, 7: 1.5100000000000001e-05, 8: 522, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe050>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.82e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:142 ForkProcess.join'}
+{0: 'Random.__init__', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 119, 3: 2, 4: 2, 5: False, 6: 6.75e-05, 7: 9.2e-06, 8: 194, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc2b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.375e-05, 15: '/home/codespace/.python/current/lib/python3.10/random.py:119 Random.__init__'}
+{0: 'Connection._check_readable', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 143, 3: 47, 4: 47, 5: False, 6: 6.67e-05, 7: 6.67e-05, 8: 396, 9: <yappi.YChildFuncStats object at 0x7fe1da6ba320>, 10: 1, 11: 'Thread', 12: 0, 14: 1.4191489361702127e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:143 Connection._check_readable'}
+{0: 'Thread._wait_for_tstate_lock', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1102, 3: 5, 4: 5, 5: False, 6: 6.43e-05, 7: 2.7300000000000003e-05, 8: 511, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe230>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.286e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1102 Thread._wait_for_tstate_lock'}
+{0: '_help_stuff_finish', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 671, 3: 1, 4: 1, 5: False, 6: 6.400000000000001e-05, 7: 1.3700000000000001e-05, 8: 471, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff730>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.400000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:671 _help_stuff_finish'}
+{0: '__subclasscheck__', 1: '/home/codespace/.python/current/lib/python3.10/abc.py', 2: 121, 3: 7, 4: 2, 5: False, 6: 6.1000000000000005e-05, 7: 1.91e-05, 8: 114, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbed70>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.714285714285715e-06, 15: '/home/codespace/.python/current/lib/python3.10/abc.py:121 __subclasscheck__'}
+{0: 'ForkProcess.is_alive', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 153, 3: 2, 4: 2, 5: False, 6: 6.0200000000000006e-05, 7: 2.3e-05, 8: 520, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe170>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.0100000000000003e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:153 ForkProcess.is_alive'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/fnmatch.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 5.9000000000000004e-05, 7: 1.56e-05, 8: 156, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf070>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.9000000000000004e-05, 15: '/home/codespace/.python/current/lib/python3.10/fnmatch.py:1 <module>'}
+{0: 'Thread.is_alive', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1169, 3: 2, 4: 2, 5: False, 6: 5.8500000000000006e-05, 7: 1.39e-05, 8: 510, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc070>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.9250000000000003e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1169 Thread.is_alive'}
+{0: 'Random.seed', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 128, 3: 2, 4: 2, 5: False, 6: 5.83e-05, 7: 2.11e-05, 8: 195, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf790>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.915e-05, 15: '/home/codespace/.python/current/lib/python3.10/random.py:128 Random.seed'}
+{0: 'Event.set', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 568, 3: 1, 4: 1, 5: False, 6: 5.7900000000000005e-05, 7: 1.0700000000000001e-05, 8: 423, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce07f0>, 10: 3, 11: 'Thread', 12: 0, 14: 5.7900000000000005e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:568 Event.set'}
+{0: 'PollSelector._key_from_fd', 1: '/home/codespace/.python/current/lib/python3.10/selectors.py', 2: 276, 3: 34, 4: 34, 5: False, 6: 5.72e-05, 7: 5.72e-05, 8: 388, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdd50>, 10: 1, 11: 'Thread', 12: 0, 14: 1.6823529411764707e-06, 15: '/home/codespace/.python/current/lib/python3.10/selectors.py:276 PollSelector._key_from_fd'}
+{0: '<module>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 1, 3: 1, 4: 1, 5: False, 6: 5.67e-05, 7: 1.3700000000000001e-05, 8: 279, 9: <yappi.YChildFuncStats object at 0x7fe1da6fea70>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.67e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:1 <module>'}
+{0: '<listcomp>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 938, 3: 34, 4: 34, 5: False, 6: 5.6300000000000006e-05, 7: 5.6300000000000006e-05, 8: 390, 9: <yappi.YChildFuncStats object at 0x7fe1da6fdf30>, 10: 1, 11: 'Thread', 12: 0, 14: 1.6558823529411767e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:938 <listcomp>'}
+{0: '_ModuleLockManager.__init__', 1: '<frozen importlib._bootstrap>', 2: 165, 3: 33, 4: 33, 5: False, 6: 5.3e-05, 7: 5.3e-05, 8: 5, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff130>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.606060606060606e-06, 15: '<frozen importlib._bootstrap>:165 _ModuleLockManager.__init__'}
+{0: 'Connection._close', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 365, 3: 6, 4: 6, 5: False, 6: 5.08e-05, 7: 2.11e-05, 8: 531, 9: <yappi.YChildFuncStats object at 0x7fe1da6fead0>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.466666666666666e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:365 Connection._close'}
+{0: 'Lock.__exit__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 97, 3: 9, 4: 9, 5: False, 6: 5.050000000000001e-05, 7: 3.69e-05, 8: 444, 9: <yappi.YChildFuncStats object at 0x7fe1da6fded0>, 10: 1, 11: 'Thread', 12: 0, 14: 5.611111111111112e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:97 Lock.__exit__'}
+{0: 'Popen.wait', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 36, 3: 1, 4: 1, 5: False, 6: 4.72e-05, 7: 5.3e-06, 8: 523, 9: <yappi.YChildFuncStats object at 0x7fe1da6fee90>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.72e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:36 Popen.wait'}
+{0: '_flush_std_streams', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 433, 3: 2, 4: 2, 5: False, 6: 4.66e-05, 7: 3.07e-05, 8: 282, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdb70>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.33e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:433 _flush_std_streams'}
+{0: '_get_tasks', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 633, 3: 9, 4: 9, 5: False, 6: 4.5600000000000004e-05, 7: 4.4200000000000004e-05, 8: 373, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce05b0>, 10: 2, 11: 'Thread', 12: 0, 14: 5.066666666666667e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:633 _get_tasks'}
+{0: 'WeakSet.add', 1: '/home/codespace/.python/current/lib/python3.10/_weakrefset.py', 2: 86, 3: 5, 4: 5, 5: False, 6: 4.5400000000000006e-05, 7: 3.7300000000000005e-05, 8: 272, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd5d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.080000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/_weakrefset.py:86 WeakSet.add'}
+{0: '__new__', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 348, 3: 6, 4: 6, 5: False, 6: 4.4500000000000004e-05, 7: 2.4200000000000002e-05, 8: 261, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd930>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.416666666666667e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:348 __new__'}
+{0: 'remove', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 106, 3: 6, 4: 6, 5: False, 6: 4.41e-05, 7: 3.26e-05, 8: 528, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd4b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.35e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:106 remove'}
+{0: 'debug', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 48, 3: 25, 4: 25, 5: False, 6: 4.2000000000000004e-05, 7: 4.2000000000000004e-05, 8: 474, 9: <yappi.YChildFuncStats object at 0x7fe1da6d9690>, 10: 1, 11: 'Thread', 12: 0, 14: 1.6800000000000002e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:48 debug'}
+{0: 'MapResult.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 796, 3: 1, 4: 1, 5: False, 6: 4.05e-05, 7: 1.1000000000000001e-05, 8: 367, 9: <yappi.YChildFuncStats object at 0x7fe1da6fea10>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.05e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:796 MapResult.__init__'}
+{0: '_new_module', 1: '<frozen importlib._bootstrap>', 2: 48, 3: 19, 4: 19, 5: False, 6: 3.93e-05, 7: 3.93e-05, 8: 50, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff1f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.0684210526315788e-06, 15: '<frozen importlib._bootstrap>:48 _new_module'}
+{0: 'decorating_function', 1: '/home/codespace/.python/current/lib/python3.10/functools.py', 2: 518, 3: 1, 4: 1, 5: False, 6: 3.91e-05, 7: 4.6e-06, 8: 158, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff9d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.91e-05, 15: '/home/codespace/.python/current/lib/python3.10/functools.py:518 decorating_function'}
+{0: '_use_posix_spawn', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 648, 3: 1, 4: 1, 5: False, 6: 3.91e-05, 7: 3.0200000000000002e-05, 8: 139, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc910>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.91e-05, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:648 _use_posix_spawn'}
+{0: '_cleanup', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 61, 3: 2, 4: 2, 5: False, 6: 3.6700000000000004e-05, 7: 2.36e-05, 8: 277, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd330>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.8350000000000002e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:61 _cleanup'}
+{0: 'ModuleSpec.has_location', 1: '<frozen importlib._bootstrap>', 2: 412, 3: 31, 4: 31, 5: False, 6: 3.5300000000000004e-05, 7: 3.5300000000000004e-05, 8: 53, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdab0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.138709677419355e-06, 15: '<frozen importlib._bootstrap>:412 ModuleSpec.has_location'}
+{0: 'Condition.notify_all', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 389, 3: 1, 4: 1, 5: False, 6: 3.51e-05, 7: 5.8e-06, 8: 426, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0790>, 10: 3, 11: 'Thread', 12: 0, 14: 3.51e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:389 Condition.notify_all'}
+{0: 'Condition._is_owned', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 279, 3: 5, 4: 5, 5: False, 6: 3.4800000000000006e-05, 7: 2.57e-05, 8: 307, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcdf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.960000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:279 Condition._is_owned'}
+{0: 'update_wrapper', 1: '/home/codespace/.python/current/lib/python3.10/functools.py', 2: 35, 3: 1, 4: 1, 5: False, 6: 3.4500000000000005e-05, 7: 1.9e-05, 8: 159, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffd30>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.4500000000000005e-05, 15: '/home/codespace/.python/current/lib/python3.10/functools.py:35 update_wrapper'}
+{0: 'close_fds', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 461, 3: 2, 4: 2, 5: False, 6: 3.3100000000000005e-05, 7: 1.22e-05, 8: 527, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff010>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6550000000000002e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:461 close_fds'}
+{0: 'Condition.__enter__', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 264, 3: 5, 4: 5, 5: False, 6: 3.23e-05, 7: 2.2400000000000002e-05, 8: 304, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbeef0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.46e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:264 Condition.__enter__'}
+{0: 'finalize', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 541, 3: 1, 4: 1, 5: False, 6: 3.18e-05, 7: 1.5e-05, 8: 124, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcd30>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.18e-05, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:541 finalize'}
+{0: '_remove', 1: '/home/codespace/.python/current/lib/python3.10/_weakrefset.py', 2: 39, 3: 5, 4: 5, 5: False, 6: 3.1700000000000005e-05, 7: 2.37e-05, 8: 526, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce01f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.340000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/_weakrefset.py:39 _remove'}
+{0: 'SourceFileLoader.__init__', 1: '<frozen importlib._bootstrap_external>', 2: 1040, 3: 19, 4: 19, 5: False, 6: 3.04e-05, 7: 3.04e-05, 8: 42, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc850>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6e-06, 15: '<frozen importlib._bootstrap_external>:1040 SourceFileLoader.__init__'}
+{0: 'MapResult.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 747, 3: 1, 4: 1, 5: False, 6: 2.9500000000000002e-05, 7: 1.66e-05, 8: 368, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdc90>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.9500000000000002e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:747 MapResult.__init__'}
+{0: '<lambda>', 1: '/home/codespace/.python/current/lib/python3.10/site-packages/_distutils_hack/__init__.py', 2: 96, 3: 27, 4: 27, 5: False, 6: 2.83e-05, 7: 2.83e-05, 8: 84, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcbb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.048148148148148e-06, 15: '/home/codespace/.python/current/lib/python3.10/site-packages/_distutils_hack/__init__.py:96 <lambda>'}
+{0: 'Condition.notify', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 359, 3: 1, 4: 1, 5: False, 6: 2.8000000000000003e-05, 7: 1.11e-05, 8: 427, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0730>, 10: 3, 11: 'Thread', 12: 0, 14: 2.8000000000000003e-05, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:359 Condition.notify'}
+{0: 'Thread._stop', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1028, 3: 3, 4: 3, 5: False, 6: 2.64e-05, 7: 1.77e-05, 8: 512, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff310>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.8e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1028 Thread._stop'}
+{0: 'Condition.__exit__', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 267, 3: 5, 4: 5, 5: False, 6: 2.48e-05, 7: 1.7500000000000002e-05, 8: 324, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd090>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.96e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:267 Condition.__exit__'}
+{0: 'SourceFileLoader.get_filename', 1: '<frozen importlib._bootstrap_external>', 2: 1065, 3: 19, 4: 19, 5: False, 6: 2.32e-05, 7: 2.32e-05, 8: 65, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcf10>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2210526315789475e-06, 15: '<frozen importlib._bootstrap_external>:1065 SourceFileLoader.get_filename'}
+{0: 'Connection._check_writable', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 147, 3: 16, 4: 16, 5: False, 6: 2.2199999999999998e-05, 7: 2.2199999999999998e-05, 8: 461, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe1d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3874999999999998e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:147 Connection._check_writable'}
+{0: 'SourceFileLoader.create_module', 1: '<frozen importlib._bootstrap_external>', 2: 874, 3: 19, 4: 19, 5: False, 6: 2.16e-05, 7: 2.16e-05, 8: 49, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfa30>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.136842105263158e-06, 15: '<frozen importlib._bootstrap_external>:874 SourceFileLoader.create_module'}
+{0: 'Condition._acquire_restore', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 276, 3: 4, 4: 4, 5: False, 6: 2.11e-05, 7: 1.43e-05, 8: 323, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce03d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.275e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:276 Condition._acquire_restore'}
+{0: 'KeyedRef.__init__', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 353, 3: 6, 4: 6, 5: False, 6: 2e-05, 7: 2e-05, 8: 262, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe890>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.3333333333333337e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:353 KeyedRef.__init__'}
+{0: 'spec_from_loader', 1: '<frozen importlib._bootstrap>', 2: 421, 3: 1, 4: 1, 5: False, 6: 1.97e-05, 7: 1.01e-05, 8: 127, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff670>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.97e-05, 15: '<frozen importlib._bootstrap>:421 spec_from_loader'}
+{0: 'WeakValueDictionary.__init__', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 105, 3: 1, 4: 1, 5: False, 6: 1.88e-05, 7: 7.7e-06, 8: 144, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe9b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.88e-05, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:105 WeakValueDictionary.__init__'}
+{0: 'Barrier', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 360, 3: 1, 4: 1, 5: False, 6: 1.87e-05, 7: 1.4400000000000001e-05, 8: 242, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe230>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.87e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:360 Barrier'}
+{0: 'Event.is_set', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 553, 3: 12, 4: 12, 5: False, 6: 1.8200000000000002e-05, 7: 1.8200000000000002e-05, 8: 299, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbee90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.5166666666666668e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:553 Event.is_set'}
+{0: 'Thread.daemon', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1198, 3: 3, 4: 3, 5: False, 6: 1.79e-05, 7: 1.3000000000000001e-05, 8: 298, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe2f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.966666666666667e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1198 Thread.daemon'}
+{0: '_make_invoke_excepthook', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1301, 3: 3, 4: 3, 5: False, 6: 1.72e-05, 7: 1.72e-05, 8: 297, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe710>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.733333333333334e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1301 _make_invoke_excepthook'}
+{0: 'Lock._make_methods', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 90, 3: 6, 4: 6, 5: False, 6: 1.6800000000000002e-05, 7: 1.6800000000000002e-05, 8: 257, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffdf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.8000000000000003e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:90 Lock._make_methods'}
+{0: 'Popen', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 702, 3: 1, 4: 1, 5: False, 6: 1.66e-05, 7: 1.52e-05, 8: 142, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffc70>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.66e-05, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:702 Popen'}
+{0: 'ExtensionFileLoader.__init__', 1: '<frozen importlib._bootstrap_external>', 2: 1163, 3: 11, 4: 11, 5: False, 6: 1.66e-05, 7: 1.66e-05, 8: 89, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbddb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.5090909090909091e-06, 15: '<frozen importlib._bootstrap_external>:1163 ExtensionFileLoader.__init__'}
+{0: 'Connection.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 122, 3: 6, 4: 6, 5: False, 6: 1.6100000000000002e-05, 7: 1.6100000000000002e-05, 8: 232, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe9b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.6833333333333336e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:122 Connection.__init__'}
+{0: 'Pool._get_sentinels', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 279, 3: 1, 4: 1, 5: False, 6: 1.6100000000000002e-05, 7: 1.6100000000000002e-05, 8: 290, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf3d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6100000000000002e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:279 Pool._get_sentinels'}
+{0: '_MainThread.daemon', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 1183, 3: 6, 4: 6, 5: False, 6: 1.5700000000000002e-05, 7: 1.5700000000000002e-05, 8: 294, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfc70>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.616666666666667e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:1183 _MainThread.daemon'}
+{0: 'ForkContext.get_context', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 187, 3: 9, 4: 9, 5: False, 6: 1.52e-05, 7: 1.52e-05, 8: 228, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfd90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6888888888888888e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:187 ForkContext.get_context'}
+{0: '_newname', 1: '/home/codespace/.python/current/lib/python3.10/threading.py', 2: 782, 3: 3, 4: 3, 5: False, 6: 1.5100000000000001e-05, 7: 1.5100000000000001e-05, 8: 292, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0250>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.033333333333334e-06, 15: '/home/codespace/.python/current/lib/python3.10/threading.py:782 _newname'}
+{0: 'ForkProcess.name', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 193, 3: 2, 4: 2, 5: False, 6: 1.48e-05, 7: 1.1400000000000001e-05, 8: 273, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbfaf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:193 ForkProcess.name'}
+{0: 'SpooledTemporaryFile', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 661, 3: 1, 4: 1, 5: False, 6: 1.4000000000000001e-05, 7: 1.4000000000000001e-05, 8: 201, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffb50>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.4000000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:661 SpooledTemporaryFile'}
+{0: 'create_module', 1: '<frozen importlib._bootstrap>', 2: 770, 3: 1, 4: 1, 5: False, 6: 1.3100000000000002e-05, 7: 3.2000000000000003e-06, 8: 130, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbeb90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3100000000000002e-05, 15: '<frozen importlib._bootstrap>:770 create_module'}
+{0: '<genexpr>', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 94, 3: 4, 4: 4, 5: False, 6: 1.29e-05, 7: 1.29e-05, 8: 271, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe770>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.225e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:94 <genexpr>'}
+{0: 'Pool.__repr__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 273, 3: 1, 4: 1, 5: False, 6: 1.2800000000000001e-05, 7: 1.0700000000000001e-05, 8: 450, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe2f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2800000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:273 Pool.__repr__'}
+{0: 'ApplyResult', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 745, 3: 1, 4: 1, 5: False, 6: 1.22e-05, 7: 1.22e-05, 8: 215, 9: <yappi.YChildFuncStats object at 0x7fe1da6fedd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.22e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:745 ApplyResult'}
+{0: 'ThreadPool', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 921, 3: 1, 4: 1, 5: False, 6: 1.1200000000000001e-05, 7: 1.1200000000000001e-05, 8: 219, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff550>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.1200000000000001e-05, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:921 ThreadPool'}
+{0: 'WeakValueDictionary.update', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 290, 3: 1, 4: 1, 5: False, 6: 1.11e-05, 7: 7.6e-06, 8: 145, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff250>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.11e-05, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:290 WeakValueDictionary.update'}
+{0: 'ForkContext.get_start_method', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 197, 3: 6, 4: 6, 5: False, 6: 1.0300000000000001e-05, 7: 1.0300000000000001e-05, 8: 245, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc130>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7166666666666668e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:197 ForkContext.get_start_method'}
+{0: 'current_process', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 37, 3: 6, 4: 6, 5: False, 6: 9.800000000000001e-06, 7: 9.800000000000001e-06, 8: 247, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe7d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6333333333333335e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:37 current_process'}
+{0: 'Random', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 103, 3: 1, 4: 1, 5: False, 6: 9.100000000000001e-06, 7: 9.100000000000001e-06, 8: 191, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd1b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 9.100000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/random.py:103 Random'}
+{0: 'CompletedProcess', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 425, 3: 1, 4: 1, 5: False, 6: 9e-06, 7: 9e-06, 8: 138, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd870>, 10: 0, 11: '_MainThread', 12: 0, 14: 9e-06, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:425 CompletedProcess'}
+{0: '_ConnectionBase', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 119, 3: 1, 4: 1, 5: False, 6: 8.900000000000001e-06, 7: 8.900000000000001e-06, 8: 203, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf190>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.900000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:119 _ConnectionBase'}
+{0: 'Queue', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 28, 3: 1, 4: 1, 5: False, 6: 8.7e-06, 7: 8.7e-06, 8: 100, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcc10>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:28 Queue'}
+{0: 'SemLock', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 46, 3: 1, 4: 1, 5: False, 6: 8.400000000000001e-06, 7: 8.400000000000001e-06, 8: 235, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf250>, 10: 0, 11: '_MainThread', 12: 0, 14: 8.400000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:46 SemLock'}
+{0: '__subclasshook__', 1: '/home/codespace/.python/current/lib/python3.10/_collections_abc.py', 2: 409, 3: 7, 4: 7, 5: False, 6: 7.9e-06, 7: 7.9e-06, 8: 116, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc490>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.1285714285714287e-06, 15: '/home/codespace/.python/current/lib/python3.10/_collections_abc.py:409 __subclasshook__'}
+{0: 'exec_module', 1: '<frozen importlib._bootstrap>', 2: 778, 3: 1, 4: 1, 5: False, 6: 7.9e-06, 7: 2.7e-06, 8: 132, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe8f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.9e-06, 15: '<frozen importlib._bootstrap>:778 exec_module'}
+{0: 'TemporaryDirectory', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 805, 3: 1, 4: 1, 5: False, 6: 7.8e-06, 7: 7.8e-06, 8: 202, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc730>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.8e-06, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:805 TemporaryDirectory'}
+{0: 'BZ2File', 1: '/home/codespace/.python/current/lib/python3.10/bz2.py', 2: 26, 3: 1, 4: 1, 5: False, 6: 7.4e-06, 7: 7.4e-06, 8: 165, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc6d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/bz2.py:26 BZ2File'}
+{0: 'LZMAFile', 1: '/home/codespace/.python/current/lib/python3.10/lzma.py', 2: 38, 3: 1, 4: 1, 5: False, 6: 7.4e-06, 7: 7.4e-06, 8: 167, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbcaf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/lzma.py:38 LZMAFile'}
+{0: 'Semaphore', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 123, 3: 1, 4: 1, 5: False, 6: 7.3e-06, 7: 7.3e-06, 8: 236, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf310>, 10: 0, 11: '_MainThread', 12: 0, 14: 7.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:123 Semaphore'}
+{0: 'SimpleQueue', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 337, 3: 1, 4: 1, 5: False, 6: 6.8e-06, 7: 6.8e-06, 8: 227, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0190>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.8e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:337 SimpleQueue'}
+{0: '_MainProcess.name', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 189, 3: 4, 4: 4, 5: False, 6: 6.8e-06, 7: 6.8e-06, 8: 270, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0310>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:189 _MainProcess.name'}
+{0: 'Queue', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 35, 3: 1, 4: 1, 5: False, 6: 6.6e-06, 7: 6.6e-06, 8: 225, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffbb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.6e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:35 Queue'}
+{0: 'StackSummary', 1: '/home/codespace/.python/current/lib/python3.10/traceback.py', 2: 335, 3: 1, 4: 1, 5: False, 6: 6.5000000000000004e-06, 7: 6.5000000000000004e-06, 8: 107, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe4d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.5000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/traceback.py:335 StackSummary'}
+{0: 'ForkProcess.ident', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 234, 3: 1, 4: 1, 5: False, 6: 6.4000000000000006e-06, 7: 4.6e-06, 8: 521, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe290>, 10: 0, 11: '_MainThread', 12: 0, 14: 6.4000000000000006e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:234 ForkProcess.ident'}
+{0: 'CalledProcessError', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 104, 3: 1, 4: 1, 5: False, 6: 5.9e-06, 7: 4.3e-06, 8: 136, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff5b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 5.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:104 CalledProcessError'}
+{0: '<genexpr>', 1: '/home/codespace/.python/current/lib/python3.10/collections/__init__.py', 2: 402, 3: 4, 4: 4, 5: False, 6: 5.2e-06, 7: 5.2e-06, 8: 182, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd3f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/collections/__init__.py:402 <genexpr>'}
+{0: 'sub_debug', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 44, 3: 3, 4: 3, 5: False, 6: 5.1e-06, 7: 5.1e-06, 8: 469, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf730>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:44 sub_debug'}
+{0: 'Popen', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py', 2: 12, 3: 1, 4: 1, 5: False, 6: 5e-06, 7: 5e-06, 8: 280, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf610>, 10: 0, 11: '_MainThread', 12: 0, 14: 5e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/popen_fork.py:12 Popen'}
+{0: 'TimeoutExpired', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 141, 3: 1, 4: 1, 5: False, 6: 4.9000000000000005e-06, 7: 3.6000000000000003e-06, 8: 137, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf4f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.9000000000000005e-06, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:141 TimeoutExpired'}
+{0: 'WeakValueDictionary', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 93, 3: 1, 4: 1, 5: False, 6: 4.7e-06, 7: 4.7e-06, 8: 118, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbde10>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:93 WeakValueDictionary'}
+{0: '_PySimpleQueue', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 258, 3: 1, 4: 1, 5: False, 6: 4.6e-06, 7: 4.6e-06, 8: 103, 9: <yappi.YChildFuncStats object at 0x7fe1da6feb30>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.6e-06, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:258 _PySimpleQueue'}
+{0: 'type._requires_builtin_wrapper', 1: '<frozen importlib._bootstrap>', 2: 254, 3: 1, 4: 1, 5: False, 6: 4.6e-06, 7: 3.4e-06, 8: 128, 9: <yappi.YChildFuncStats object at 0x7fe1da6fefb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.6e-06, 15: '<frozen importlib._bootstrap>:254 type._requires_builtin_wrapper'}
+{0: 'Listener', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 437, 3: 1, 4: 1, 5: False, 6: 4.6e-06, 7: 4.6e-06, 8: 205, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd0f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.6e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:437 Listener'}
+{0: 'JoinableQueue', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py', 2: 294, 3: 1, 4: 1, 5: False, 6: 4.5e-06, 7: 4.5e-06, 8: 226, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdbd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.5e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/queues.py:294 JoinableQueue'}
+{0: 'ForkProcess.daemon', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py', 2: 205, 3: 2, 4: 2, 5: False, 6: 4.4e-06, 7: 4.4e-06, 8: 274, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe470>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.2e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/process.py:205 ForkProcess.daemon'}
+{0: 'Condition', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 210, 3: 1, 4: 1, 5: False, 6: 4.3e-06, 7: 4.3e-06, 8: 240, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc1f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:210 Condition'}
+{0: 'lru_cache', 1: '/home/codespace/.python/current/lib/python3.10/functools.py', 2: 479, 3: 1, 4: 1, 5: False, 6: 4.3e-06, 7: 3.1000000000000004e-06, 8: 157, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc970>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/functools.py:479 lru_cache'}
+{0: 'MapResult.ready', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 756, 3: 1, 4: 1, 5: False, 6: 4.2000000000000004e-06, 7: 3.1000000000000004e-06, 8: 447, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc7f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.2000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:756 MapResult.ready'}
+{0: 'WeakKeyDictionary', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 357, 3: 1, 4: 1, 5: False, 6: 4.2000000000000004e-06, 7: 4.2000000000000004e-06, 8: 123, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdcf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.2000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:357 WeakKeyDictionary'}
+{0: '_PoolCache.__init__', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 157, 3: 1, 4: 1, 5: False, 6: 4.1000000000000006e-06, 7: 4.1000000000000006e-06, 8: 263, 9: <yappi.YChildFuncStats object at 0x7fe1da6fec50>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.1000000000000006e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:157 _PoolCache.__init__'}
+{0: 'ForkAwareThreadLock', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 368, 3: 1, 4: 1, 5: False, 6: 4.1000000000000006e-06, 7: 4.1000000000000006e-06, 8: 149, 9: <yappi.YChildFuncStats object at 0x7fe1da6fef50>, 10: 0, 11: '_MainThread', 12: 0, 14: 4.1000000000000006e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:368 ForkAwareThreadLock'}
+{0: 'KeyedRef', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 336, 3: 1, 4: 1, 5: False, 6: 3.9e-06, 7: 3.9e-06, 8: 122, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff910>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:336 KeyedRef'}
+{0: 'DecompressReader', 1: '/home/codespace/.python/current/lib/python3.10/_compression.py', 2: 33, 3: 1, 4: 1, 5: False, 6: 3.5000000000000004e-06, 7: 3.5000000000000004e-06, 8: 164, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe830>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.5000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/_compression.py:33 DecompressReader'}
+{0: 'TracebackException', 1: '/home/codespace/.python/current/lib/python3.10/traceback.py', 2: 457, 3: 1, 4: 1, 5: False, 6: 3.5000000000000004e-06, 7: 3.5000000000000004e-06, 8: 108, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbff70>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.5000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/traceback.py:457 TracebackException'}
+{0: 'FrameSummary', 1: '/home/codespace/.python/current/lib/python3.10/traceback.py', 2: 243, 3: 1, 4: 1, 5: False, 6: 3.5000000000000004e-06, 7: 3.5000000000000004e-06, 8: 106, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0430>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.5000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/traceback.py:243 FrameSummary'}
+{0: 'Connection', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 353, 3: 1, 4: 1, 5: False, 6: 3.4e-06, 7: 3.4e-06, 8: 204, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd810>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:353 Connection'}
+{0: '__init_subclass__', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 219, 3: 1, 4: 1, 5: False, 6: 3.4e-06, 7: 3.4e-06, 8: 193, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf430>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.4e-06, 15: '/home/codespace/.python/current/lib/python3.10/random.py:219 __init_subclass__'}
+{0: 'MaybeEncodingError', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 80, 3: 1, 4: 1, 5: False, 6: 3.2000000000000003e-06, 7: 3.2000000000000003e-06, 8: 212, 9: <yappi.YChildFuncStats object at 0x7fe1da6fe290>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.2000000000000003e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:80 MaybeEncodingError'}
+{0: 'WeakMethod', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 39, 3: 1, 4: 1, 5: False, 6: 3.1000000000000004e-06, 7: 3.1000000000000004e-06, 8: 117, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc4f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.1000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:39 WeakMethod'}
+{0: 'Event', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 321, 3: 1, 4: 1, 5: False, 6: 3.1000000000000004e-06, 7: 3.1000000000000004e-06, 8: 241, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd630>, 10: 0, 11: '_MainThread', 12: 0, 14: 3.1000000000000004e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:321 Event'}
+{0: 'RegistryError', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 75, 3: 1, 4: 1, 5: False, 6: 3e-06, 7: 3e-06, 8: 173, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdf90>, 10: 0, 11: '_MainThread', 12: 0, 14: 3e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:75 RegistryError'}
+{0: 'MapResult', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 794, 3: 1, 4: 1, 5: False, 6: 2.9e-06, 7: 2.9e-06, 8: 216, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf670>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:794 MapResult'}
+{0: 'IMapIterator', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 837, 3: 1, 4: 1, 5: False, 6: 2.9e-06, 7: 2.9e-06, 8: 217, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce0070>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:837 IMapIterator'}
+{0: '_PoolCache', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 150, 3: 1, 4: 1, 5: False, 6: 2.8000000000000003e-06, 7: 2.8000000000000003e-06, 8: 213, 9: <yappi.YChildFuncStats object at 0x7fe1d8ce00d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.8000000000000003e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:150 _PoolCache'}
+{0: '_RandomNameSequence', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 132, 3: 1, 4: 1, 5: False, 6: 2.7e-06, 7: 2.7e-06, 8: 198, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbded0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:132 _RandomNameSequence'}
+{0: 'ExceptionWithTraceback', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 63, 3: 1, 4: 1, 5: False, 6: 2.6e-06, 7: 2.6e-06, 8: 211, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe4d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.6e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:63 ExceptionWithTraceback'}
+{0: 'Finalize', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 182, 3: 1, 4: 1, 5: False, 6: 2.6e-06, 7: 2.6e-06, 8: 147, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf370>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.6e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:182 Finalize'}
+{0: 'SystemRandom', 1: '/home/codespace/.python/current/lib/python3.10/random.py', 2: 813, 3: 1, 4: 1, 5: False, 6: 2.5e-06, 7: 2.5e-06, 8: 192, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbedd0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.5e-06, 15: '/home/codespace/.python/current/lib/python3.10/random.py:813 SystemRandom'}
+{0: '_TemporaryFileCloser', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 416, 3: 1, 4: 1, 5: False, 6: 2.4000000000000003e-06, 7: 2.4000000000000003e-06, 8: 199, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbceb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.4000000000000003e-06, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:416 _TemporaryFileCloser'}
+{0: 'RLock', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 184, 3: 1, 4: 1, 5: False, 6: 2.3e-06, 7: 2.3e-06, 8: 239, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc550>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:184 RLock'}
+{0: 'Lock', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 159, 3: 1, 4: 1, 5: False, 6: 2.3e-06, 7: 2.3e-06, 8: 238, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdc30>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:159 Lock'}
+{0: 'BoundedSemaphore', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py', 2: 142, 3: 1, 4: 1, 5: False, 6: 2.3e-06, 7: 2.3e-06, 8: 237, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe530>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/synchronize.py:142 BoundedSemaphore'}
+{0: 'BaseStream', 1: '/home/codespace/.python/current/lib/python3.10/_compression.py', 2: 9, 3: 1, 4: 1, 5: False, 6: 2.2e-06, 7: 2.2e-06, 8: 163, 9: <yappi.YChildFuncStats object at 0x7fe1da6febf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.2e-06, 15: '/home/codespace/.python/current/lib/python3.10/_compression.py:9 BaseStream'}
+{0: '_TemporaryFileWrapper', 1: '/home/codespace/.python/current/lib/python3.10/tempfile.py', 2: 459, 3: 1, 4: 1, 5: False, 6: 2.1000000000000002e-06, 7: 2.1000000000000002e-06, 8: 200, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd6f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 2.1000000000000002e-06, 15: '/home/codespace/.python/current/lib/python3.10/tempfile.py:459 _TemporaryFileWrapper'}
+{0: 'register', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py', 2: 43, 3: 1, 4: 1, 5: False, 6: 1.9e-06, 7: 1.9e-06, 8: 209, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff190>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/reduction.py:43 register'}
+{0: 'DefaultContext.get_context', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py', 2: 237, 3: 1, 4: 1, 5: False, 6: 1.9e-06, 7: 1.9e-06, 8: 220, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf850>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.9e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/context.py:237 DefaultContext.get_context'}
+{0: 'IMapUnorderedIterator', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 906, 3: 1, 4: 1, 5: False, 6: 1.8000000000000001e-06, 7: 1.8000000000000001e-06, 8: 218, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd510>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.8000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:906 IMapUnorderedIterator'}
+{0: 'PriorityQueue', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 223, 3: 1, 4: 1, 5: False, 6: 1.8000000000000001e-06, 7: 1.8000000000000001e-06, 8: 101, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf130>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.8000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:223 PriorityQueue'}
+{0: 'LifoQueue', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 242, 3: 1, 4: 1, 5: False, 6: 1.7e-06, 7: 1.7e-06, 8: 102, 9: <yappi.YChildFuncStats object at 0x7fe1da6ff850>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:242 LifoQueue'}
+{0: '<module>', 1: '<string>', 2: 1, 3: 1, 4: 1, 5: False, 6: 1.7e-06, 7: 1.7e-06, 8: 184, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd030>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '<string>:1 <module>'}
+{0: '_Sentinel', 1: '/home/codespace/.python/current/lib/python3.10/traceback.py', 2: 87, 3: 1, 4: 1, 5: False, 6: 1.7e-06, 7: 1.7e-06, 8: 105, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbde70>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/traceback.py:87 _Sentinel'}
+{0: 'SocketListener', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 584, 3: 1, 4: 1, 5: False, 6: 1.7e-06, 7: 1.7e-06, 8: 206, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf9d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.7e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:584 SocketListener'}
+{0: 'Full', 1: '/home/codespace/.python/current/lib/python3.10/queue.py', 2: 23, 3: 1, 4: 1, 5: False, 6: 1.6000000000000001e-06, 7: 1.6000000000000001e-06, 8: 99, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc370>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/queue.py:23 Full'}
+{0: 'ForkAwareLocal', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 385, 3: 1, 4: 1, 5: False, 6: 1.6000000000000001e-06, 7: 1.6000000000000001e-06, 8: 150, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc9d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:385 ForkAwareLocal'}
+{0: 'ConnectionWrapper', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 770, 3: 1, 4: 1, 5: False, 6: 1.6000000000000001e-06, 7: 1.6000000000000001e-06, 8: 207, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbefb0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:770 ConnectionWrapper'}
+{0: 'RemoteTraceback', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 57, 3: 1, 4: 1, 5: False, 6: 1.6000000000000001e-06, 7: 1.6000000000000001e-06, 8: 210, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf550>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.6000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:57 RemoteTraceback'}
+{0: 'Error', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 59, 3: 1, 4: 1, 5: False, 6: 1.5e-06, 7: 1.5e-06, 8: 168, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc250>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.5e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:59 Error'}
+{0: 'SubprocessError', 1: '/home/codespace/.python/current/lib/python3.10/subprocess.py', 2: 101, 3: 1, 4: 1, 5: False, 6: 1.5e-06, 7: 1.5e-06, 8: 135, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf1f0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.5e-06, 15: '/home/codespace/.python/current/lib/python3.10/subprocess.py:101 SubprocessError'}
+{0: 'XmlListener', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py', 2: 792, 3: 1, 4: 1, 5: False, 6: 1.4000000000000001e-06, 7: 1.4000000000000001e-06, 8: 208, 9: <yappi.YChildFuncStats object at 0x7fe1da6fff70>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.4000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/connection.py:792 XmlListener'}
+{0: '_platform_supports_abstract_sockets', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py', 2: 108, 3: 1, 4: 1, 5: False, 6: 1.4000000000000001e-06, 7: 1.4000000000000001e-06, 8: 143, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbd390>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.4000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/util.py:108 _platform_supports_abstract_sockets'}
+{0: 'Pool._check_running', 1: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py', 2: 351, 3: 1, 4: 1, 5: False, 6: 1.4000000000000001e-06, 7: 1.4000000000000001e-06, 8: 365, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe0b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.4000000000000001e-06, 15: '/home/codespace/.python/current/lib/python3.10/multiprocessing/pool.py:351 Pool._check_running'}
+{0: 'ReadError', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 72, 3: 1, 4: 1, 5: False, 6: 1.3e-06, 7: 1.3e-06, 8: 172, 9: <yappi.YChildFuncStats object at 0x7fe1da6feb90>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:72 ReadError'}
+{0: 'SameFileError', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 62, 3: 1, 4: 1, 5: False, 6: 1.3e-06, 7: 1.3e-06, 8: 169, 9: <yappi.YChildFuncStats object at 0x7fe1da6ffaf0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:62 SameFileError'}
+{0: 'SpecialFileError', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 65, 3: 1, 4: 1, 5: False, 6: 1.3e-06, 7: 1.3e-06, 8: 170, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe6b0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:65 SpecialFileError'}
+{0: '_Info', 1: '/home/codespace/.python/current/lib/python3.10/weakref.py', 2: 566, 3: 1, 4: 1, 5: False, 6: 1.3e-06, 7: 1.3e-06, 8: 125, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbf0d0>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.3e-06, 15: '/home/codespace/.python/current/lib/python3.10/weakref.py:566 _Info'}
+{0: '_GiveupOnFastCopy', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 79, 3: 1, 4: 1, 5: False, 6: 1.2000000000000002e-06, 7: 1.2000000000000002e-06, 8: 174, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbc790>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2000000000000002e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:79 _GiveupOnFastCopy'}
+{0: 'is_package', 1: '<frozen importlib._bootstrap>', 2: 795, 3: 1, 4: 1, 5: False, 6: 1.2000000000000002e-06, 7: 1.2000000000000002e-06, 8: 129, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbdf30>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2000000000000002e-06, 15: '<frozen importlib._bootstrap>:795 is_package'}
+{0: 'ExecError', 1: '/home/codespace/.python/current/lib/python3.10/shutil.py', 2: 69, 3: 1, 4: 1, 5: False, 6: 1.2000000000000002e-06, 7: 1.2000000000000002e-06, 8: 171, 9: <yappi.YChildFuncStats object at 0x7fe1d8cbe470>, 10: 0, 11: '_MainThread', 12: 0, 14: 1.2000000000000002e-06, 15: '/home/codespace/.python/current/lib/python3.10/shutil.py:69 ExecError'}
