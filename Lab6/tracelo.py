@@ -23,7 +23,7 @@ def prime_factors(n):
 
 def main():
     pool = multiprocessing.Pool()
-    results = pool.map(prime_factors, range(1, 101))
+    results = pool.map(prime_factors, range(1, 2001))
     for i in range(len(results)):
         str_out = ""
         for elem in results[i]:
