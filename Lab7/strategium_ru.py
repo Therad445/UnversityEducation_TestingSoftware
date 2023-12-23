@@ -91,6 +91,21 @@ def test_auth_user(driver_init):
     user_name_id = driver_init.find_element(By.XPATH, "//a[@title=\"Перейти в свой профиль\"]")
     assert (user_name_id, True)
 
+def test_auth_user_incor(driver_init):
+    auth_user("TheRad45343", "3423423Radmir", driver_init=driver_init)
+    # user_name_id = wait_of_element_located(xpath='//*[@class=\"ipsType_dark ipsType_large ipsType_bold\"]/a',driver_init=driver_init)
+    # user_name_id = driver_init.find_element(By.XPATH, "//a[@title=\"Перейти в свой профиль\"]")
+    assert "Логин, который вы ввели, не связан ни с одним аккаунтом. Убедитесь, что вы ввели корректное значение." in driver_init.page_source
+    # assert (user_name_id, True)
+
+
+def test_auth_user_password_incor(driver_init):
+    auth_user("TheRad445", "3423423Radmir", driver_init=driver_init)
+    # user_name_id = wait_of_element_located(xpath='//*[@class=\"ipsType_dark ipsType_large ipsType_bold\"]/a',driver_init=driver_init)
+    # user_name_id = driver_init.find_element(By.XPATH, "//a[@title=\"Перейти в свой профиль\"]")
+    assert "Введённый пароль является некорректным. Попробуйте ещё раз (убедитесь, что Caps Lock выключен)" in driver_init.page_source
+    # assert (user_name_id, True)
+
 
 def test_reg_user_correct():
     assert (reg_user("TheRad45343", "islamov.radmir2016@yandex.ru", "3423423Radmir"), False)
@@ -118,6 +133,13 @@ def test_reg_user_password_cor():
 def test_reg_user_password_incor():
     assert (reg_user("", "", "!!!@#@!@#!"), True)
 
+
+def test_reg_user_multiple():
+    for i in range(5):
+        assert (reg_user("TheRad45343", "islamov.radmir2016@yandex.ru", "3423423Radmir"), False)
+
+
+
 # def add_item_to_cart(xpath_item, driver_init):
 #     # Поиск и ождиание прогрузки ссылки элемента товара магазина и клик по ссылке
 #     item_name = wait_of_element_located(
@@ -131,6 +153,17 @@ def test_reg_user_password_incor():
 #         driver_init=driver_init)
 #     item_add_button.click()
 #
+def test_reg_user_password_co():
+    assert (reg_user("", "", "34234324Raddfdf"), True)
+
+def test_reg_user_password_incr():
+    assert (reg_user("", "", "!!!@#@!@#!"), True)
+
+
+def test_reg_re_multiple():
+    for i in range(2):
+        assert (reg_user("TheRad45343", "islamov.radmir2016@yandex.ru", "3423423Radmir"), False)
+
 #     # Ждем пока товар добавится в корзину, появится span(кол-во позиций в корзине)
 #     # Возвращаем True или False в зависимости добавлися товар или нет
 #     shop_cart_with_item = wait_of_element_located(
@@ -169,6 +202,11 @@ if __name__ == '__main__':
     test_search_cor(driver_init=driver_init)
     test_search_incor(driver_init=driver_init)
     test_auth_user(driver_init=driver_init)
+    test_auth_user_incor(driver_init=driver_init)
+    test_auth_user_password_incor(driver_init=driver_init)
+    test_reg_user_password_co()
+    test_reg_re_multiple()
+    test_reg_user_password_incr()
     test_reg_user_correct()
     test_reg_user_name_cor()
     test_reg_user_name_incor()
@@ -176,3 +214,4 @@ if __name__ == '__main__':
     test_reg_user_email_incor()
     test_reg_user_password_cor()
     test_reg_user_password_incor()
+    test_reg_user_multiple()
