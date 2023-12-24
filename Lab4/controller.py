@@ -17,8 +17,8 @@ class Controller:
         self.view.main()
 
     def on_button_click(self, caption):
-        result = self.model.calculate(caption)
-        self.view.value_var.set(result)
+        self.result = self.model.calculate(caption)
+        self.view.value_var.set(self.result)
 
 
 if __name__ == "__main__":
