@@ -215,3 +215,4 @@ if __name__ == '__main__':
     test_reg_user_password_cor()
     test_reg_user_password_incor()
     test_reg_user_multiple()
+
